@@ -1,0 +1,179 @@
+---
+title: "Normalization"
+author: Arend Lis
+bibliography: references.bib
+biblio-style: apalike
+link-citation: yes
+colorlinks: yes
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Normalization}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", message = TRUE, warning = FALSE
+)
+```
+
+
+```{r setup}
+library(PRONE)
+```
+
+# Load Data (TMT)
+
+Here, we are directly working with the [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) data. For more information on how to create the SummarizedExperiment from a proteomics data set, please refer to the ["Get Started"](PRONE.Rmd) vignette.
+
+The example TMT data set originates from [@biadglegne_mycobacterium_2022].
+
+```{r load_real_tmt}
+data("tuberculosis_TMT_se")
+se <- tuberculosis_TMT_se
+```
+
+```{r, eval = TRUE, include = FALSE}
+se <- subset_SE_by_norm(se, ain = c("raw", "log2"))
+```
+
+# Normalization
+
+For normalization, there are multiple functions available which can be used to normalize the data. First of all, to know which normalization methods can be applied:
+
+```{r}
+get_normalization_methods()
+```
+
+You can use `normalize_se()` by specifying all normalization methods you want to apply on the data. For instance, if you want to perform median, mean, and MAD normalization, just execute this line:
+
+```{r}
+se_norm <- normalize_se(se, c("RobNorm", "Mean", "Median"), combination_pattern = NULL)
+```
+
+However, you can directly also add combinations of methods. The combination pattern specifies which method to apply on top of the specified normalized data. For instance, if you want to perform IRS on top of Median-normalized data:
+
+```{r}
+se_norm <- normalize_se(se, c("RobNorm", "Mean", "Median", "IRS_on_RobNorm", "IRS_on_Mean", "IRS_on_Median"), combination_pattern = "_on_")
+```
+
+Finally, you can also normalize your data by applying the specific normalization method. This makes it possible to design the parameters of an individual function more specifically. For instance, if you want to normalize the data by the median, you can use the function `medianNorm()`. By default, median normalization is performed on raw-data. Using the individual normalization functions, you can easily specify
+
+```{r}
+se_norm <- medianNorm(se_norm, ain = "log2", aout = "Median")
+```
+
+All normalized intensities are stored in the SummarizedExperiment object and you can check the already performed normalization techniques using:
+
+```{r}
+names(SummarizedExperiment::assays(se_norm))
+```
+
+We suggest using the default value of the on_raw parameter. This parameter specifies whether the data should be normalized on raw or log2-transformed data. The default value of the "on_raw" parameters was made for each normalization method individually based on publications.
+
+
+# Qualitative and Quantitative Evaluation
+
+PRONE offers many functions to comparatively evaluate the performance of the normalization methods. Notably, the parameter "ain" can always be set. By specifying "ain = NULL", all normalization methods that were previously performed and are saved in the SummarizedExperiment object are considered. If you want to evaluate only a selection of normalization methods, you can specify them in the "ain" parameter. For instance, if you want to evaluate only the IRS_on_RobNorm and Mean normalization methods, you can set "ain = c("IRS_on_RobNorm", "Mean")".
+
+## Visual Inspection
+
+You can comparatively visualize the normalized data by using the function `plot_boxplots()`, `plot_densities()`, and `plot_pca()`.
+
+### Boxplots of Normalized Data
+
+```{r, fig.height = 12}
+plot_boxplots(se_norm, ain = NULL, color_by = NULL, label_by = NULL, ncol = 3, facet_norm = TRUE) + ggplot2::theme(legend.position = "bottom", legend.direction = "vertical")
+
+```
+
+But you can also just plot a selection of normalization methods and color for instance by batch:
+
+```{r}
+plot_boxplots(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"), color_by = "Pool", label_by = NULL, facet_norm = TRUE)
+```
+
+Another option that you have is to return the boxplots for each normalized data independently as a single ggplot object. For this, you need to set facet = FALSE:
+
+```{r}
+plot_boxplots(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"), color_by = "Pool", label_by = NULL, facet_norm = FALSE)
+```
+
+### Densities of Normalized Data
+
+Similarly you can visualize the densities of the normalized data.
+
+```{r}
+plot_densities(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"), color_by = NULL, facet_norm = TRUE)
+```
+
+### PCA of Normalized Data
+
+Furthermore, you can visualize the normalized data in a PCA plot. Here you have some more arguments that can be specified If you decide to visualize the methods in independent plots (facet_norm = FALSE), then a list of ggplot objects is returned. However, you have the additional option to facet by any other column of the metadata (using the facet_by parameter). Here an example:
+
+```{r}
+plot_PCA(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"), color_by = "Group", label_by = "No", shape_by = "Pool", facet_norm = FALSE, facet_by = "Group")
+```
+
+Or you can simply plot the PCA of the normalized data next to each other. However, the facet_by argument can then not be used. Reminder, by setting color_by = NULL, it will be first checked if a condition has been set in the SummarizedExperiment during loading the data. 
+
+```{r}
+plot_PCA(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"), color_by = NULL, label_by = "No", shape_by = "Pool", facet_norm = TRUE) + ggplot2::theme(legend.position = "bottom", legend.direction = "vertical")
+```
+
+Additionally, you can add all the individual normalized sample intensities to a big SummarizedExperiment object, and perform a single PCA on all samples (all samples meaning samples from all normalization methods). First, you need to create the SummarizedExperiment object using `generate_complete_SE()` and then you can simply call the `plot_PCA()` function.
+
+```{r}
+se_complete <- generate_complete_SE(se_norm, ain = NULL) # NULL -> all assays are taken
+
+plot_PCA(se_complete, ain = NULL, color_by = "Normalization", label_by = "No", shape_by = "Pool", facet_norm = FALSE)
+```
+
+
+## Intragroup Variation
+
+The assessment of the normalization methods is commonly centered on their ability to decrease intragroup variation between samples, using intragroup pooled coefficient of variation (PCV), pooled estimate of variance (PEV), and pooled median absolute deviation (PMAD) as measures of variability. Furthermore, the Pearson correlation between samples is used to measure the similarity of the samples within the same group.
+
+In PRONE, you can evaluate the intragroup variation of the normalized data by using the functions `plot_intragroup_correlation()`, `plot_intragroup_PCV()`, `plot_intragroup_PMAD()`, and `plot_intragroup_PEV()`.
+
+```{r}
+plot_intragroup_correlation(se_norm, ain = NULL, condition = NULL, method = "pearson")
+```
+
+You have two options to visualize intragroup PCV, PEV, and PMAD. You can either simply generate boxplots of intragroup variation of each normalization method (diff = FALSE), or you can visualize the reduction of intragroup variation of each normalization method compared to log2 (diff = TRUE).
+
+```{r}
+plot_intragroup_PCV(se_norm, ain = NULL, condition = NULL, diff = FALSE)
+plot_intragroup_PEV(se_norm, ain = NULL, condition = NULL, diff = FALSE)
+plot_intragroup_PMAD(se_norm, ain = NULL, condition = NULL, diff = FALSE)
+```
+
+```{r}
+plot_intragroup_PCV(se_norm, ain = NULL, condition = NULL, diff = TRUE) 
+plot_intragroup_PEV(se_norm, ain = NULL, condition = NULL, diff = TRUE)
+plot_intragroup_PMAD(se_norm, ain = NULL, condition = NULL, diff = TRUE)
+```
+
+# Subset SummarizedExperiment
+
+After the qualitative and quantitative evaluation, you may have noticed that some normalization techniques are not appropriate for the specific real-world data set. For further analysis, you want to remove them and not evaluate the specific normalization methods furthermore. For this, the `remove_assays_from_SE()` method can be used. 
+
+```{r}
+se_no_MAD <- remove_assays_from_SE(se_norm, assays_to_remove = c("MAD"))
+```
+
+In contrast, you can also subset the SummarizedExperiment object to only include specific normalization techniques using the `subset_SE_by_norm()`method.
+
+```{r}
+se_subset <- subset_SE_by_norm(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"))
+```
+
+# Session Info
+
+```{r}
+utils::sessionInfo()
+```
+
+# References

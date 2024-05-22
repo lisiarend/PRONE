@@ -1,0 +1,61 @@
+---
+title: "Imputation"
+author: Arend Lis
+bibliography: references.bib
+biblio-style: apalike
+link-citation: yes
+colorlinks: yes
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Imputation}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", message = TRUE, warning = FALSE
+)
+```
+
+
+```{r setup}
+library(PRONE)
+```
+
+# Load Data (TMT)
+
+Here, we are directly working with the [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) data. For more information on how to create the SummarizedExperiment from a proteomics data set, please refer to the ["Get Started"](PRONE.Rmd) vignette.
+
+The example TMT data set originates from [@biadglegne_mycobacterium_2022].
+
+```{r load_real_tmt}
+data("tuberculosis_TMT_se")
+se <- tuberculosis_TMT_se
+```
+
+# Preprocessing 
+
+As we have seen in the Preprocessing phase, that samples "1.HC_Pool1" and "1.HC_Pool2" have been removed from the data set due to their high amount of missing values (more than 80% of NAs per sample), before imputing the data we will here remove these two samples.
+
+```{r}
+se <- remove_samples_manually(se, "Label", c("1.HC_Pool1", "1.HC_Pool2"))
+```
+
+
+# Impute Data
+
+Currently, there is only a mixed imputation method available in PRONE: k-nearest neighbor imputation for proteins with missing values at random and a left-shifted Gaussian distribution for proteins with missing values not at random. Imputation can be performed on a selection of normalized data sets using the "ain" parameter in the `impute_SE` function. The default is to impute all assays (ain = NULL). 
+
+```{r impute}
+se <- impute_se(se, ain = NULL)
+```
+
+# Session Info
+
+```{r}
+utils::sessionInfo()
+```
+
+# References

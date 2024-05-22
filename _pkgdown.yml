@@ -1,0 +1,13 @@
+url: https://lisiarend.github.io/PRONE/
+template:
+  bootstrap: 5
+articles:
+  - title: Articles
+    navbar: ~
+    contents:
+      - Preprocessing
+      - Normalization
+      - Imputation
+      - Differential_Expression
+      - Spike_In_Data
+

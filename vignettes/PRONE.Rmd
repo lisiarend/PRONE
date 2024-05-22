@@ -1,0 +1,151 @@
+---
+title: "Getting started with PRONE"
+author: Arend Lis
+bibliography: references.bib
+biblio-style: apalike
+link-citation: yes
+colorlinks: yes
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with PRONE}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", message = TRUE, warning = FALSE
+)
+```
+
+# Introduction
+
+This guide serves as an introduction to the PRONE R package, designed to facilitate the preparation of your data set for utilization of the PRONE's functionalities. It begins by delineating the underlying data structure essential for the application of the package, followed by a brief description of how to apply different normalization techniques to your data. Additionally, this tutorial shows how to export the normalized data at the end.
+
+Beyond the scope of this introductory tutorial, PRONE encompassess a broad spectrum of functionalities, ranging from preprocessing steps, imputation, normalization and evaluation of the performance of different normalization techniques, to the identification of differentially expressed proteins. These functionalities are detailed in dedicated vignettes, offering detailed insights and instructions for leveraging full capabilities of the PRONE package:
+
+* [Preprocessing Tutorial](Preprocessing.Rmd)
+* [Imputation Tutorial](Imputation.Rmd)
+* [Normalization Tutorial](Normalization.Rmd)
+* [Differential Expression Tutorial](DifferentialExpression.Rmd)
+
+Furthermore, PRONE provides additional functionalities for the analysis of spike-in data sets, which are detailed in the following vignette:
+
+* [Spike-In Tutorial](Spike_In_Data.Rmd)
+
+# Installation
+
+```{r loading, eval = FALSE}
+# Install PRONE.R from github and build vignettes
+if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+devtools::install_github("lisiarend/PRONE.R")
+```
+
+```{r library}
+# Load and attach PRONE.R 
+library("PRONE")
+```
+
+# Load Data
+
+PRONE uses the [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) class as storage for protein intensities and meta data information on the proteomics data set. Hence, before being able to execute the functionalities of PRONE, the data needs to be saved accordingly. For this, the `load_data()` function was implemented and requires different parameters which are explained in the following: 
+
+Then, different parameters need to be specified:
+
+* __data__: refers to the data.frame containing the protein intensities
+* __md__: refers to the data.frame containing the meta-data information
+* __protein_column__: refers to the column in the data frame that contains the protein IDs
+* __gene_column__ (optional): refers to the column in the data frame that contains the gene IDs
+* __condition_column__ (optional): refers to the column in the meta-data table that contains the condition information - this can also be specified later
+* __label_column__ (optional): refers to the column in the meta-data table that contains the label information - sometimes 
+
+If you have a TMT data set with samples being measured in different batches than you have to specify the batch information. If reference samples were included in each batch, then additionally specify the samples names of the reference samples.
+
+* __batch_column__ (optional): refers to the column in the meta-data table that contains the batch information
+* __ref_samples__ (optional): refers to the samples that should be used as reference samples for normalization
+
+<b>Attention:</b> You need to make sure that the sample names are saved in a column named "Column" in the meta-data table and are named accordingly in the protein intensity table.
+
+## Example 1: TMT Data Set
+
+The example TMT data set originates from [@biadglegne_mycobacterium_2022].
+
+```{r load_real_tmt}
+data_path <- readPRONE_example("tuberculosis_TMT_proteinGroups.txt")
+md_path <- readPRONE_example("tuberculosis_TMT_metadata.txt")
+
+data <- read.csv(data_path, sep ="\t")
+md <- read.csv(md_path, sep = "\t")
+
+md$Column <- stringr::str_replace_all(md$Column, " ", ".")
+
+ref_samples <- md[md$Group == "Common.reference",]$Column
+
+se <- load_data(data, md, protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = ref_samples, batch_column = "Pool", condition_column = "Group", label_column = "Label")
+
+```
+
+### Example 2: LFQ Data Set
+
+The example data set originates from [@vehmas_liver_2016]. This data set is used for the subsequent examples in this tutorial.
+
+```{r load_real_lfq}
+data_path <- readPRONE_example("MouseP450_LFQ_protein_table.csv")
+data <- read.csv(data_path, row.names = 1)
+
+# Create metadata (since it was not given)
+md <- data.frame(Column = colnames(data)[seq_len((ncol(data)-2))])
+md$Animal <- sapply(strsplit(as.character(md$Column),"_"), "[", 1)
+md$Condition <- sapply(strsplit(as.character(md$Column),"_"), "[", 2)
+
+se <- load_data(data, md, protein_column = "Accession", gene_column = NULL, ref_samples = NULL, batch_column = NULL, condition_column = "Condition", label_column = NULL)
+```
+
+# Data Structure
+
+The SummarizedExperiment object contains the protein intensities as "assay", the meta-data table as "colData", and additional columns for instance resulting from MaxQuant as "rowData". Furthermore, information on the different columns, for instance, which columns contains the batch information, can be found in the "metadata" slot.
+
+```{r}
+se
+```
+
+The different data types can be accessed by using the `assays()` function. Currently, only the raw data and log2-transformed data are stored in the SummarizedExperiment object.
+
+```{r}
+SummarizedExperiment::assays(se)
+```
+
+# Preprocessing, Imputation, Normalization, Evaluation, and Differential Expression
+
+As already mentioned in the introduction section, many functionalities are available in PRONE. All these functionalities are mainly based on the SummarizedExperiment object.
+
+In this tutorial, we will only perform simple normalization of the data using median and LoessF normalization. 
+
+```{r}
+se <- normalize_se(se, c("Median", "LoessF"))
+```
+
+The normalized intensities will be saved as additional assays in the SummarizedExperiment object.
+
+```{r}
+SummarizedExperiment::assays(se)
+```
+
+Again, more information on the individual processes can be find in dedicated vignettes.
+
+# Download Data
+
+Finally, you can easily download the normalized data by using the `export_data()`function. This function will save the specified assays as CSV files and the SummarizedExperiment object as an RDS file in a specified output directory.
+
+```{r, eval = FALSE}
+export_data(se_norm, out_dir = "output/", ain = c("log2", "Median", "LoessF"))
+```
+
+# Session Info
+
+```{r}
+utils::sessionInfo()
+```
+
+# References

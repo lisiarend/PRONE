@@ -1,0 +1,1 @@
+utils::globalVariables(c("Column", "ID", "Intensity", "valid_val", "pepIDs", "Change", "Assay", "Comparison", ".", "p_value", "Spiked", "TP", "FN", "FP", "TN", "Concentration", "Sensitivity", "Precision", "Value", "AUC", "Assays", "Median_FP", "Median_TP", "Q1_FP", "Q1_TP", "Q3_FP", "Q3_TP", "NAs", "n", "N", "Var1", "Var2", "value", "Protein.IDs"))

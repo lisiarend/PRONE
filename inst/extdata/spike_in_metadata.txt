@@ -1,0 +1,7 @@
+"Column"	"Label"	"Concentration"	"Condition"
+"LFQ.intensity.H1"	"H1"	30	"H"
+"LFQ.intensity.H2"	"H2"	30	"H"
+"LFQ.intensity.H3"	"H3"	30	"H"
+"LFQ.intensity.L1"	"L1"	10	"L"
+"LFQ.intensity.L2"	"L2"	10	"L"
+"LFQ.intensity.L3"	"L3"	10	"L"

@@ -1,0 +1,190 @@
+---
+title: "How to Use PRONE for the Evaluation of Normalization Methods on Spike-In Data"
+author: Arend Lis
+bibliography: references.bib
+biblio-style: apalike
+link-citation: yes
+colorlinks: yes
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{PRONE for Spike-In Data Sets}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", message = TRUE, warning = FALSE
+)
+```
+
+```{r setup}
+library(PRONE)
+```
+
+# Spike-in Data Sets
+
+PRONE also offers some additional functionalities for the evaluation of normalization techniques on spike-in data sets with a known ground truth. These functionalities will be delineated subsequently. Additionally, all functionalities detailed in the context of real-world data sets remain applicable to the SummarizedExperiment object associated with spike-in data sets.
+
+The example spike-in data set is from [@cox_accurate_2014]. For the illustration of the package functionality, a smaller subset of the data consisting of 1500 proteins was used. For the complete data set, please refer to the original publication.
+
+```{r}
+
+
+## Load Data
+
+Initially, the spike-in data set needs to be imported into a SummarizedExperiment container. In contrast to the real-world data sets, you need to specify the "spike_column", "spike_value", "spike_concentration", and utilize the `load_spike_data()` function for this purpose. 
+
+Here, the "spike_column" denotes the column in the protein intensity data file encompassing information whether a proteins is classified as spike-in or background protein. The "spike_value" determines the value/identifier that is used to identify the spike-in proteins in the "spike_column", and the "spike_concentration" identifies the column containing the concentration values of the spike-in proteins (in this case the different conditions that will be tested in DE analysis).
+
+```{r}
+data_path <- readPRONE_example("spike_in_proteinGroups.txt")
+md_path <- readPRONE_example("spike_in_metadata.txt")
+
+data <- read.csv(data_path, sep = "\t")
+md <- read.csv(md_path, sep = "\t")
+
+# Check if some protein groups are mixed
+mixed <- grepl("Homo sapiens.*Escherichia|Escherichia.*Homo sapiens", data$Fasta.headers)
+data <- data[!mixed,]
+
+data$Spiked <- rep("HUMAN", nrow(data))
+data$Spiked[grepl("ECOLI", data$Fasta.headers)] <- "ECOLI"
+
+se <- load_spike_data(data, md, spike_column = "Spiked", spike_value = "ECOLI", spike_concentration = "Concentration",protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = NULL, batch_column = NULL, condition_column = "Condition", label_column = "Label")
+```
+
+## Overview of the Data
+
+To get an overview on the number of identified (non-NA) spike-in proteins per sample, you can use the `plot_identified_spiked_proteins()` function.
+
+```{r}
+plot_identified_spiked_proteins(se)
+```
+To compare the distributions of spike-in and human proteins in the different sample groups (here high-low), use the function `plot_histogram_spiked()`. Again, "condition = NULL" means that the condition specified by loading the data is used, but you can also specify any other column of the meta data.
+
+```{r}
+plot_histogram_spiked(se, condition = NULL)
+```
+
+If you want to have a look at the amount of actual measure spike-in, you can use the `plot_profiles_spiked()` function. Moreover, you can analyze whether the intensities of the background proteins, here HUMAN proteins, are constant across the different spike-in concentrations.
+
+```{r}
+plot_profiles_spiked(se, xlab = "Concentration")
+```
+
+## Preprocessing, Normalization, & Imputation
+
+Given that the preprocessing (including filtering of proteins and samples), normalization, and imputation operations remain invariant for spike-in data sets compared to real-world data sets, the same methodologies can be employed across both types. In this context, normalization will only be demonstrated here as the performance of the methods will be evaluated in DE analysis, while detailed descriptions of the other functionalities are available in preceding sections. 
+
+```{r}
+se_norm <- normalize_se(se, c("Median", "Mean", "MAD", "LoessF"), combination_pattern = NULL)
+```
+
+
+## Differential Expression Analysis
+
+Due to the known spike-in concentrations, the normalization methods can be evaluated based on their ability to detect DE proteins. The DE analysis can be conducted using the same methodology as for real-world data sets. However, other visualization options are available and performance metrics can be calculated for spike-in data sets.
+
+### Run DE Analysis
+
+First, you need to specify the comparisons you want to perform in DE analysis. For this, a special function was developed which helps to build the right comparison strings.
+
+```{r}
+comparisons <- specify_comparisons(se_norm, condition = "Condition", sep = NULL, control = NULL)
+```
+
+Then you can run DE analysis:
+
+```{r}
+de_res <- run_DE(se = se_norm, 
+                     comparisons = comparisons,
+                     ain = NULL, 
+                     condition = NULL, 
+                     DE_method = "limma", 
+                     covariate = NULL, 
+                     logFC = TRUE, 
+                     logFC_up = 1, 
+                     logFC_down = -1, 
+                     p_adj = TRUE, 
+                     alpha = 0.05, 
+                     B = 100, 
+                     K = 500)
+```
+
+### Evaluate DE Results with Performance Metrics
+
+Before being able to visualize the DE results, you need to run `get_spiked_stats_DE()` to calculate multiple performance metrics, such as the number of true positives, number fo false positives, etc.
+
+```{r}
+stats <- get_spiked_stats_DE(se_norm, de_res)
+```
+
+You have different options to visualize the amount of true and false positives for the different normalization techniques and pairwise comparisons. For all these functions, you can specify a subset of normalization methods and comparisons. If you do not specify anything, all normalization methods and comparisons of the "stats" data frame are used.
+
+The `plot_TP_FP_spiked_bar()` function generates a barplot showing the number of false positives and true positives for each normalization method and is facetted by pairwise comparison.
+
+
+```{r}
+plot_TP_FP_spiked_bar(stats, ain = c("Median", "Mean", "MAD", "LoessF"), comparisons = NULL)
+```
+
+If many pairwise comparisons were performed, the `plot_TP_FP_spiked_box()` function can be used to visualize the distribution of true and false positives for all pairwise comparisons in a boxplot. 
+
+Given that the data set encompasses merely two distinct spike-in concentrations and therefore only one pairwise comparison has been conducted in DE analysis, a barplot would be more appropriate. Nonetheless, for demonstration purposes, a boxplot will be used here.
+
+```{r}
+plot_TP_FP_spiked_box(stats, ain = c("Median", "Mean", "MAD", "LoessF"), comparisons = NULL)
+```
+
+Furthermore, similarly the `plot_TP_FP_spiked_scatter()` function can be used to visualize the true and false positives in a scatter plot. Here, a scatterplot of the median true positives and false positives is calculated across all comparisons and displayed for each normalization method with errorbars showing the Q1 and Q3. Here again, this plot is more suitable for data sets with multiple pairwise comparisons.
+
+```{r}
+plot_TP_FP_spiked_scatter(stats, ain = NULL, comparisons = NULL)
+```
+
+Furthermore, other performance metrics that the number of true positives and false positives can be visualized using the `plot_stats_spiked_heatmap()` function. Here, currently, the sensitivity, specificity, precision, FPR, F1 score, and accuracy can be visualized for the different normalization methods and pairwise comparisons.
+
+```{r}
+plot_stats_spiked_heatmap(stats, ain = c("Median", "Mean", "MAD"), metrics = c("Precision", "F1Score"))
+```
+
+Finally, ROC and AUC values can be calculated and visualized using the `plot_ROC_AUC_spiked()` function. This function returns a plot showing the ROC curves, a bar plot with the AUC values for each comparison, and a boxplot with the distributions of AUC values across all comparisons.
+
+```{r}
+plot_ROC_AUC_spiked(se_norm, de_res, ain = c("Median", "Mean", "LoessF"), comparisons = NULL)
+```
+
+### Log Fold Change Distributions
+
+Furthermore, you can visualize the distribution of log fold changes for the different conditions using the `plot_fold_changes_spiked()` function. The fold changes of the background proteins should be centered around zero, while the spike-in proteins should be centered around the actual log fold change calculated based on the spike-in concentrations.
+
+```{r}
+plot_fold_changes_spiked(se_norm, de_res, condition = "Condition", ain = c("Median", "Mean", "MAD"), comparisons = NULL)
+```
+
+
+### P-Value Distributions
+
+Similarly, the distributions of the p-values can be visualized using the `plot_pvalues_spiked()` function.
+
+```{r}
+plot_pvalues_spiked(se_norm, de_res, ain = c("Median", "Mean", "MAD"), comparisons = NULL)
+```
+
+### Log Fold Change Thresholds
+
+Due to the high amount of false positives encountered in spike-in data sets, we provided a function to test for different log fold change thresholds to try to reduce the amount of false positives. The function `plot_logFC_thresholds_spiked()` can be used to visualize the number of true positives and false positives for different log fold change thresholds.
+
+```{r}
+plot_logFC_thresholds_spiked(se_norm, de_res, condition = NULL, ain = c("Median", "Mean", "MAD"), nrow = 1, alpha = 0.05)
+```
+
+# Session Info
+
+```{r}
+utils::sessionInfo()
+```
+
+# References
