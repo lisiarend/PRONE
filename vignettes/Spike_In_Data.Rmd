@@ -29,9 +29,6 @@ PRONE also offers some additional functionalities for the evaluation of normaliz
 
 The example spike-in data set is from [@cox_accurate_2014]. For the illustration of the package functionality, a smaller subset of the data consisting of 1500 proteins was used. For the complete data set, please refer to the original publication.
 
-```{r}
-
-
 ## Load Data
 
 Initially, the spike-in data set needs to be imported into a SummarizedExperiment container. In contrast to the real-world data sets, you need to specify the "spike_column", "spike_value", "spike_concentration", and utilize the `load_spike_data()` function for this purpose. 
