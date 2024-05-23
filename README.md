@@ -64,7 +64,7 @@ methods is available.
 
 ## Usage
 
-To get familiar with the functionalities of the R package, check out [lisiarend.github.io/PRONE/](lisiarend.github.io/PRONE/).
+To get familiar with the functionalities of the R package, check out our vignettes available at [https://lisiarend.github.io/PRONE/](https://lisiarend.github.io/PRONE/).
 
 ## Citation
 
