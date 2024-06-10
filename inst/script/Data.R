@@ -1,6 +1,8 @@
-## code to prepare datasets goes here
+## This file contains code for recreating the data files in the extdata folder. Details about the sources of the individual data files are provided in R/data.R and vignettes.
 
-# Tuberculosis TMT data
+# Tuberculosis TMT data 
+# @source Biadglegne et al. Mycobacterium tuberculosis Affects Protein and Lipid Content of Circulating Exosomes in Infected Patients Depending on Tuberculosis Disease State. Biomedicines 10.4 (Mar. 2022), p. 783. doi: 10.3390/ biomedicines10040783.
+
 data_path <- readPRONE_example("tuberculosis_TMT_proteinGroups.txt")
 md_path <- readPRONE_example("tuberculosis_TMT_metadata.txt")
 
@@ -13,7 +15,8 @@ ref_samples <- md[md$Group == "ref",]$Column
 
 tuberculosis_TMT_se <- load_data(data, md, protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = ref_samples, batch_column = "Pool", condition_column = "Group", label_column = "Label")
 
-# Spike-in Data
+# Spike-in Data 
+# @source Jürgen Cox, Marco Y. Hein, Christian A. Luber, Igor Paron, Nagarjuna Nagaraj, and Matthias Mann.Accurate Proteome-wide Label-free Quantification by Delayed Normalization and Maximal Peptide Ratio Extraction, Termed MaxLFQ. Molecular & Cellular Proteomics 13.9 (Sept. 2014), pp. 2513–2526. <https://doi.org/10.1074/mcp.M113.031591>.
 
 data_path <- readPRONE_example("spike_in_proteinGroups.txt")
 md_path <- readPRONE_example("spike_in_metadata.txt")
