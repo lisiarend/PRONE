@@ -25,7 +25,9 @@ export_data <- function(se, out_dir, ain = NULL) {
   row_data <- data.frame(SummarizedExperiment::rowData(se), check.names=FALSE)
   assays <- SummarizedExperiment::assays(se)
   for (assay in ain) {
+    cols <- names(SummarizedExperiment::assays(se)[[assay]])
     assay_data <- data.frame(SummarizedExperiment::assays(se)[[assay]])
+    colnames(assay_data) <- cols
     combined_data <- cbind(row_data, assay_data)
     combined_data$IDs <- NULL
     utils::write.csv(combined_data, file.path(out_dir, paste0(assay, "_normalized_data.csv")), row.names = FALSE)
