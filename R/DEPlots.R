@@ -246,7 +246,7 @@ plot_overview_DE_bar <- function(de_res, ain = NULL, comparisons = NULL, plot_ty
     p <-  ggplot2::ggplot(melted_dt, ggplot2::aes(x = get("N"), y = get("Assay"), fill = get("Comparison"), label = get("N"))) +
       ggplot2::geom_bar(stat = "identity", position = ggplot2::position_stack()) +
       ggplot2::scale_fill_brewer(palette = "Set2", name = "Comparison") +
-      ggplot2::facet_wrap(~Change, scales = "free_y") +
+      ggplot2::facet_wrap(~Change, scales = "free_x") +
       ggplot2::labs(title = "Overview of DE results", x = "Number of proteins", y = "Assay") +
       ggplot2::theme_minimal()
   } else if(plot_type == "facet_comp"){
@@ -259,7 +259,7 @@ plot_overview_DE_bar <- function(de_res, ain = NULL, comparisons = NULL, plot_ty
     }
     p <- ggplot2::ggplot(melted_dt, ggplot2::aes(x = get("N"), y = get("Assay"), fill = get("Change"), label = get("N"))) +
       ggplot2::geom_bar(stat = "identity", position = ggplot2::position_stack()) +
-      ggplot2::facet_wrap(~Comparison, scales = "free") +
+      ggplot2::facet_wrap(~Comparison, scales = "free_x") +
       ggplot2::scale_fill_manual(values = color_values, name = "Change") +
       ggplot2::labs(title = "Overview of DE results", x = "Number of proteins", y = "Assay") +
       ggplot2::theme_minimal()
