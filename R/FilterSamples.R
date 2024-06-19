@@ -255,25 +255,23 @@ plot_tot_int_samples <- function(se, ain="raw", color_by = NULL, label_by = NULL
 #' poma_res <- detect_outliers_POMA(tuberculosis_TMT_se, ain="raw",
 #'                                  condition = NULL, method="euclidean",
 #'                                  type="median", group=TRUE, coeff = 1.5)
-detect_outliers_POMA <- function(se, ain="raw", condition = NULL, method="euclidean", type="median", group=TRUE, coeff = 1.5){
+detect_outliers_POMA <- function(se, ain="log2", condition = NULL, method="euclidean", type="median", group=TRUE, coeff = 1.5){
 
   # get condition
   condition <- get_condition_value(se, condition)
+  
+  stopifnot(length(ain) == 1)
 
   # prepare data
   md <- data.table::as.data.table(SummarizedExperiment::colData(se))
   if(group){
     condition <- S4Vectors::metadata(se)$condition
-    md <- md %>% dplyr::select(dplyr::all_of(condition), dplyr::everything())
+    condition <- md[[condition]]
   } else {
     condition <- rep("complete",nrow(md))
-    md$Complete <- condition
-    md <- md %>% dplyr::select(dplyr::all_of("Complete"), dplyr::everything())
-
   }
-  rownames(md) <- md$Column
-  md[[condition]] <- as.factor(md[[condition]])
-  data <- SummarizedExperiment::SummarizedExperiment(assays = SummarizedExperiment::assays(se)$log2, colData = md, rowData=SummarizedExperiment::rowData(se))
+  new_md <- data.table::data.table("Condition" = as.factor(condition), "Column" = md$Column)
+  data <- SummarizedExperiment::SummarizedExperiment(assays = SummarizedExperiment::assays(se)[[ain]], colData = new_md, rowData=SummarizedExperiment::rowData(se))
   
   # perform POMA outlier detection
   poma_res <- POMA::PomaOutliers(data, method=method, type=type, coef = coeff)
