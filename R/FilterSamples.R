@@ -266,11 +266,13 @@ detect_outliers_POMA <- function(se, ain="log2", condition = NULL, method="eucli
   md <- data.table::as.data.table(SummarizedExperiment::colData(se))
   if(group){
     condition <- S4Vectors::metadata(se)$condition
-    condition <- md[[condition]]
+    condition_vector <- md[[condition]]
   } else {
-    condition <- rep("complete",nrow(md))
+    condition <- "complete"
+    condition_vector <- rep("complete",nrow(md))
   }
-  new_md <- data.table::data.table("Condition" = as.factor(condition), "Column" = md$Column)
+  new_md <- data.table::data.table("Condition" = as.factor(condition_vector), "Column" = md$Column)
+  colnames(new_md)[1] <- condition
   data <- SummarizedExperiment::SummarizedExperiment(assays = SummarizedExperiment::assays(se)[[ain]], colData = new_md, rowData=SummarizedExperiment::rowData(se))
   
   # perform POMA outlier detection
