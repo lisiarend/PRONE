@@ -286,8 +286,8 @@ detect_outliers_POMA <- function(se, ain="log2", condition = NULL, method="eucli
   # modify plots
   poma_res$polygon_plot <- poma_res$polygon_plot +
     ggplot2::scale_fill_manual(name = condition, values = col_vector) +
-    ggplot2::scale_color_manual(condition, values = c(rep("black", length(unique(md[, condition ]))))) +
-    ggplot2::scale_shape_manual(name = condition, values = seq_len(length(unique(md[, condition]))))
+    ggplot2::scale_color_manual(condition, values = c(rep("black", length(unique(md[[condition]]))))) +
+    ggplot2::scale_shape_manual(name = condition, values = seq_len(length(unique(md[[condition]]))))
 
   poma_res$distance_boxplot <- poma_res$distance_boxplot +
     ggplot2::scale_fill_manual(name = condition, values = col_vector) +
