@@ -24,7 +24,7 @@ get_spiked_stats_DE <- function(se, de_res){
                      Specificity = TN /(TN + FP),
                      Precision = TP / (TP + FP),
                      FPR = FP / (FP + TN),
-                     F1Score = 2 * (Precision * Sensitivity) / (Precision + Sensitivity),
+                     F1Score = (2 * TP) / (2 * TP + FP + FN),
                      Accuracy = (TP + TN)/(TP + TN + FP + FN)) %>%
     data.table::as.data.table()
   return(stats)
