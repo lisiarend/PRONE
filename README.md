@@ -32,16 +32,28 @@ To install the package, run:
 ``` r
   # Install PRONE.R from github and build vignettes
   if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-  devtools::install_github("lisiarend/PRONE.R", build_vignettes = TRUE, dependencies = TRUE)
-  # Load and attach PRONE.R 
+  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE)
+  
+  # Load and attach PRONE 
   library("PRONE")
   
   # TODO: bioconductor installation
 ```
 
+Due to current issues with DEqMS on Bioconductor and the ongoing
+submission of PRONE to Bioconductor, the main branch of PRONE no longer
+includes DEqMS functions. If you need to perform DEqMS, please use the
+with_DEqMS branch.
+
+``` r
+  # Install PRONE.R from github and build vignettes
+  if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE, ref = "with_DEqMS")
+```
+
 ## Workflow
 
-A six-step workflow was developed to evaluate the
+A six-step workflow was developed in R version 4.2.2 to evaluate the
 effectiveness of the previously defined normalization methods on
 proteomics data. The workflow incorporates a set of novel functions and
 also integrates various methods adopted by state-of-the-art tools.
@@ -64,7 +76,9 @@ methods is available.
 
 ## Usage
 
-To get familiar with the functionalities of the R package, check out our vignettes available at [https://lisiarend.github.io/PRONE/](https://lisiarend.github.io/PRONE/).
+To get familiar with the functionalities of the R package, check out the
+article [Getting started with
+PRONE](https://lisiarend.github.io/PRONE/articles/PRONE.html).
 
 ## Citation
 

@@ -26,7 +26,7 @@ library(PRONE)
 
 # Load Data (TMT)
 
-Here, we are directly working with the [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) data. For more information on how to create the SummarizedExperiment from a proteomics data set, please refer to the ["Get Started"](PRONE.Rmd) vignette.
+Here, we are directly working with the [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) data. For more information on how to create the SummarizedExperiment from a proteomics data set, please refer to the ["Get Started"](PRONE.html) vignette.
 
 The example TMT data set originates from [@biadglegne_mycobacterium_2022].
 

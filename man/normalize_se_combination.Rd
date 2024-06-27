@@ -20,7 +20,7 @@ normalize_se_combination(
 \arguments{
 \item{se}{SummarizedExperiment containing all necessary information of the proteomics data set}
 
-\item{methods}{Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_all_normalization_methods())}
+\item{methods}{Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_normalization_methods())}
 
 \item{ains}{Vector of assays of SummarizedExperiment object to apply the normalization methods (e.g. if you want to perform Median normalization on IRS-normalized data)}
 

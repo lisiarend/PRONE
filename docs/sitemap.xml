@@ -106,6 +106,18 @@
     <loc>https://lisiarend.github.io/PRONE/reference/filter_complete_NA_proteins.html</loc>
   </url>
   <url>
+    <loc>https://lisiarend.github.io/PRONE/reference/filter_out_NA_proteins_by_threshold.html</loc>
+  </url>
+  <url>
+    <loc>https://lisiarend.github.io/PRONE/reference/filter_out_complete_NA_proteins.html</loc>
+  </url>
+  <url>
+    <loc>https://lisiarend.github.io/PRONE/reference/filter_out_proteins_by_ID.html</loc>
+  </url>
+  <url>
+    <loc>https://lisiarend.github.io/PRONE/reference/filter_out_proteins_by_value.html</loc>
+  </url>
+  <url>
     <loc>https://lisiarend.github.io/PRONE/reference/filter_proteins_by_ID.html</loc>
   </url>
   <url>

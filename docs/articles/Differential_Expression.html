@@ -99,8 +99,7 @@
 </h2>
 <p>Here, we are directly working with the <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html" class="external-link">SummarizedExperiment</a>
 data. For more information on how to create the SummarizedExperiment
-from a proteomics data set, please refer to the <a href="PRONE.Rmd">“Get
-Started”</a> vignette.</p>
+from a proteomics data set, please refer to the <a href="PRONE.html">“Get Started”</a> vignette.</p>
 <p>The example TMT data set originates from <span class="citation">(Biadglegne et al. 2022)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"tuberculosis_TMT_se"</span><span class="op">)</span></span>
@@ -113,7 +112,7 @@ Started”</a> vignette.</p>
 methods on their ability to detect differentially expressed proteins, we
 first perform a simple normalization here. For more details about how to
 normalize data and evaluate the normalization appraoches quantitatively
-and qualitatively using PRONE, please refer to the <a href="Normalization.Rmd">“Normalization”</a> vignette.</p>
+and qualitatively using PRONE, please refer to the <a href="Normalization.html">“Normalization”</a> vignette.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">se_norm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalize_se.html">normalize_se</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"IRS_on_RobNorm"</span>, <span class="st">"IRS_on_Median"</span>, <span class="st">"IRS_on_LoessF"</span>, <span class="st">"IRS_on_Quantile"</span><span class="op">)</span>, combination_pattern <span class="op">=</span> <span class="st">"_on_"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; RobNorm normalization not yet performed. Single RobNorm normalization performed now.</span></span>
@@ -316,8 +315,9 @@ also a table with the intersections is provided by the
 <code><a href="../reference/plot_upset_DE.html">plot_upset_DE()</a></code>function.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">intersections</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_upset_DE.html">plot_upset_DE</a></span><span class="op">(</span><span class="va">de_res</span>, ain <span class="op">=</span> <span class="cn">NULL</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span>, min_degree <span class="op">=</span> <span class="fl">6</span>, plot_type <span class="op">=</span> <span class="st">"stacked"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; All normalization methods of de_res will be visualized.</span></span>
-<span><span class="co"># put legend on top due to very long comparisons</span></span>
+<span><span class="co">#&gt; All normalization methods of de_res will be visualized.</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># put legend on top due to very long comparisons</span></span>
 <span><span class="va">intersections</span><span class="op">$</span><span class="va">upset</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">intersections</span><span class="op">$</span><span class="va">upset</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span>, legend.direction <span class="op">=</span> <span class="st">"vertical"</span><span class="op">)</span></span>
 <span><span class="va">intersections</span><span class="op">$</span><span class="va">upset</span></span></code></pre></div>
 <p><img src="Differential_Expression_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
@@ -327,7 +327,7 @@ normalization methods. A individual heatmap can be generated for each
 comparison (“plot_type = single”), a single heatmap facetted by
 comparison (“facet_comp”) or a single heatmap taking all comparisons
 into account (“all”) can be generated.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_jaccard_heatmap.html">plot_jaccard_heatmap</a></span><span class="op">(</span><span class="va">de_res</span>, ain <span class="op">=</span> <span class="cn">NULL</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, plot_type <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; All normalization methods of de_res will be visualized.</span></span></code></pre></div>
 <p><img src="Differential_Expression_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
@@ -337,7 +337,7 @@ number of methods that need to agree on the DE status of a protein. The
 function <code>get_consensus_DE()</code> returns a list of consensus DE
 proteins for either each comparison separately or for all comparisons
 combined.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span><span class="fu"><a href="../reference/extract_consensus_DE_candidates.html">extract_consensus_DE_candidates</a></span><span class="op">(</span><span class="va">de_res</span>, ain <span class="op">=</span> <span class="cn">NULL</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span>, norm_thr <span class="op">=</span> <span class="fl">0.8</span>, per_comparison <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>scrollX <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64"],["A0A075B6I1","A0A075B6K4;P01715","A0A075B6K5;P80748;A0A075B6K2","A0A075B6K5;P80748;A0A075B6K2","A0A075B730;P58107","A0A0B4J1V6;A0A0B4J1V0","A0A0B4J1Y8","A0A0B4J1Y8","A0A0C4DH34","A0A2R8Y484;Q08722","A0A2R8YDL0;O75443","A0A3B3ISR2;B4DPQ0;P00736;F5H2D0;A0A3B3ITU4;F5H1V0;F5H6Y3;F5H3N3;F5H1N6;F5GWL0;F5H3A3;H0YFL7;Q9NZP8","A1L4H1;M0QZ17","A6NNI4;A0A2R8Y478;A0A7I2V3T0;A0A7I2V3T7;G8JLH6;A0A087WU13;F5GXT1;P21926","B0YIW2;P02656","B0YIW2;P02656","CON__P02663","D6RF35;P02774;D6RBJ7;D6RF20;CON__Q3MHN5;CON__ENSEMBL:ENSBTAP00000018229","F5GXS0;A0A140TA44;A0A0G2JL54;P0C0L5;A0A140TA49;A0A140TA32;A0A140TA29;A0A0G2JPR0;P0C0L4;A0A3B3ISA6;A0A3B3ISD7;CON__P01030;CON__ENSEMBL:ENSBTAP00000007350","H7C4K3;A0A7I2V2F9;E7EUI6;P05556;A0A7I2V348;C9JPK5;H7C4N8;A0A7I2V5Z8;A0A7I2V5T3","J3QQX6;J3QRQ1;P13598;J3QQR8;J3QRT5;J3QKR4","J3QQX6;J3QRQ1;P13598;J3QQR8;J3QRT5;J3QKR4","J3QQX6;J3QRQ1;P13598;J3QQR8;J3QRT5;J3QKR4","K7ER74;P02655;Q6P163;V9GYJ8","K7ER74;P02655;Q6P163;V9GYJ8","K7ERI9;P02654;K7EJI9;K7ELM9;K7EPF9;K7EKP1","K7ERI9;P02654;K7EJI9;K7ELM9;K7EPF9;K7EKP1","O14672","O60832","O60832","O75636","O95445;Q5SRP5","P00738;A0A0C4DGL8;J3QR68;H0Y300;J3QLC9;A0A087WU08;H3BS21;J3KRH2;J3KTC3;J3KSV1;J3QQI8;H3BMJ7","P00738;A0A0C4DGL8;J3QR68;H0Y300;J3QLC9;A0A087WU08;H3BS21;J3KRH2;J3KTC3;J3KSV1;J3QQI8;H3BMJ7","P00738;A0A0C4DGL8;J3QR68;H0Y300;J3QLC9;A0A087WU08;H3BS21;J3KRH2;J3KTC3;J3KSV1;J3QQI8;H3BMJ7","P01009;A0A024R6I7;A0A0G2JRN3;G3V2B9;A0A0G2JPK4;P20848","P01023;CON__ENSEMBL:ENSBTAP00000024146;H0YFH1;F8W7L3","P01699","P01701","P01701","P02452","P02649;H0Y7L5;E9PEV4;E7ERP7;CON__Q03247","P02763","P04004;H0YJW9;F5GX75","P04430","P05106;H3BM21;I3L4X8","P07996;CON__Q28194;A8MZG1;A0A7I2YQ86;A0A7I2V585;A0A7I2YQT6;A0A3B3ITK0;P35442","P08514;A0A3B3IU79","P0DJI8","P0DJI8","P0DJI9","P13501","P27105;F8VSL7","P31947","P55056","P55056","Q04917;F8WEB6;A2IDB1","Q13201;E7EPG1","Q5SZB4","Q68D42","REV__E7EPF5;REV__O43639","REV__H0YI42;REV__Q8IXF0;REV__F8VS42;REV__F8VR32","REV__Q96JF0","REV__Q9Y5T5"],["TBL-HC","TBL-HC","TBL-HC","TBL-PTB","PTB-HC","PTB-HC","TBL-HC","TBL-PTB","TBL-HC","PTB-HC","TBL-PTB","TBL-HC","TBL-HC","PTB-HC","PTB-HC","TBL-HC","Rx-PTB","PTB-HC","PTB-HC","PTB-HC","PTB-HC","TBL-PTB","Rx-PTB","PTB-HC","TBL-HC","PTB-HC","TBL-HC","Rx-PTB","PTB-HC","TBL-HC","Rx-PTB","Rx-PTB","PTB-HC","TBL-PTB","Rx-PTB","PTB-HC","PTB-HC","TBL-PTB","TBL-HC","TBL-PTB","PTB-HC","PTB-HC","PTB-HC","PTB-HC","Rx-PTB","PTB-HC","PTB-HC","PTB-HC","PTB-HC","TBL-PTB","PTB-HC","TBL-HC","PTB-HC","PTB-HC","PTB-HC","TBL-HC","PTB-HC","PTB-HC","TBL-HC","Rx-PTB","Rx-PTB","PTB-HC","Rx-PTB","PTB-HC"],[9,8,8,9,9,8,9,9,8,9,8,9,8,9,8,8,9,9,9,9,9,8,8,8,9,8,8,8,8,8,8,8,9,8,8,9,9,9,9,8,8,8,9,8,8,9,9,9,9,8,9,8,9,9,8,9,9,9,8,8,8,8,9,9],[100,88.88888888888889,88.88888888888889,100,100,88.88888888888889,100,100,88.88888888888889,100,88.88888888888889,100,88.88888888888889,100,88.88888888888889,88.88888888888889,100,100,100,100,100,88.88888888888889,88.88888888888889,88.88888888888889,100,88.88888888888889,88.88888888888889,88.88888888888889,88.88888888888889,88.88888888888889,88.88888888888889,88.88888888888889,100,88.88888888888889,88.88888888888889,100,100,100,100,88.88888888888889,88.88888888888889,88.88888888888889,100,88.88888888888889,88.88888888888889,100,100,100,100,88.88888888888889,100,88.88888888888889,100,100,88.88888888888889,100,100,100,88.88888888888889,88.88888888888889,88.88888888888889,88.88888888888889,100,100]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Protein.IDs<\/th>\n      <th>Comparison<\/th>\n      <th>Intersections<\/th>\n      <th>Percentage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Protein.IDs","targets":1},{"name":"Comparison","targets":2},{"name":"Intersections","targets":3},{"name":"Percentage","targets":4}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
@@ -346,7 +346,7 @@ combined.</p>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-apple-darwin20</span></span>
@@ -359,53 +359,53 @@ combined.</p>
 <span><span class="co">#&gt; locale:</span></span>
 <span><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; time zone: Europe/Luxembourg</span></span>
+<span><span class="co">#&gt; time zone: Europe/Berlin</span></span>
 <span><span class="co">#&gt; tzcode source: internal</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
-<span><span class="co">#&gt; [1] stats     graphics  grDevices datasets  utils     methods   base     </span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
 <span><span class="co">#&gt; [1] PRONE_0.99.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] rlang_1.1.3                 magrittr_2.0.3             </span></span>
+<span><span class="co">#&gt;   [1] rlang_1.1.4                 magrittr_2.0.3             </span></span>
 <span><span class="co">#&gt;   [3] GetoptLong_1.0.5            clue_0.3-65                </span></span>
 <span><span class="co">#&gt;   [5] matrixStats_1.3.0           compiler_4.4.0             </span></span>
-<span><span class="co">#&gt;   [7] reshape2_1.4.4              png_0.1-8                  </span></span>
-<span><span class="co">#&gt;   [9] systemfonts_1.1.0           vctrs_0.6.5                </span></span>
-<span><span class="co">#&gt;  [11] stringr_1.5.1               ProtGenerics_1.35.4        </span></span>
+<span><span class="co">#&gt;   [7] png_0.1-8                   systemfonts_1.1.0          </span></span>
+<span><span class="co">#&gt;   [9] vctrs_0.6.5                 reshape2_1.4.4             </span></span>
+<span><span class="co">#&gt;  [11] stringr_1.5.1               ProtGenerics_1.36.0        </span></span>
 <span><span class="co">#&gt;  [13] shape_1.4.6.1               pkgconfig_2.0.3            </span></span>
-<span><span class="co">#&gt;  [15] crayon_1.5.2                fastmap_1.1.1              </span></span>
-<span><span class="co">#&gt;  [17] XVector_0.43.1              labeling_0.4.3             </span></span>
-<span><span class="co">#&gt;  [19] utf8_1.2.4                  rmarkdown_2.26             </span></span>
-<span><span class="co">#&gt;  [21] UCSC.utils_0.99.7           preprocessCore_1.65.0      </span></span>
-<span><span class="co">#&gt;  [23] ragg_1.3.0                  purrr_1.0.2                </span></span>
-<span><span class="co">#&gt;  [25] xfun_0.43                   MultiAssayExperiment_1.29.1</span></span>
-<span><span class="co">#&gt;  [27] zlibbioc_1.49.3             cachem_1.0.8               </span></span>
-<span><span class="co">#&gt;  [29] GenomeInfoDb_1.39.14        jsonlite_1.8.8             </span></span>
-<span><span class="co">#&gt;  [31] highr_0.10                  DelayedArray_0.29.9        </span></span>
-<span><span class="co">#&gt;  [33] BiocParallel_1.37.1         parallel_4.4.0             </span></span>
-<span><span class="co">#&gt;  [35] cluster_2.1.6               R6_2.5.1                   </span></span>
-<span><span class="co">#&gt;  [37] RColorBrewer_1.1-3          stringi_1.8.3              </span></span>
-<span><span class="co">#&gt;  [39] bslib_0.7.0                 ComplexUpset_1.3.3         </span></span>
-<span><span class="co">#&gt;  [41] limma_3.59.10               GenomicRanges_1.55.4       </span></span>
-<span><span class="co">#&gt;  [43] jquerylib_0.1.4             iterators_1.0.14           </span></span>
-<span><span class="co">#&gt;  [45] Rcpp_1.0.12                 SummarizedExperiment_1.34.0</span></span>
-<span><span class="co">#&gt;  [47] knitr_1.46                  IRanges_2.37.1             </span></span>
-<span><span class="co">#&gt;  [49] splines_4.4.0               Matrix_1.7-0               </span></span>
-<span><span class="co">#&gt;  [51] igraph_2.0.3                tidyselect_1.2.1           </span></span>
-<span><span class="co">#&gt;  [53] rstudioapi_0.16.0           abind_1.4-5                </span></span>
-<span><span class="co">#&gt;  [55] yaml_2.3.8                  ggtext_0.1.2               </span></span>
-<span><span class="co">#&gt;  [57] doParallel_1.0.17           codetools_0.2-20           </span></span>
-<span><span class="co">#&gt;  [59] affy_1.81.0                 lattice_0.22-6             </span></span>
-<span><span class="co">#&gt;  [61] tibble_3.2.1                plyr_1.8.9                 </span></span>
-<span><span class="co">#&gt;  [63] withr_3.0.0                 Biobase_2.63.1             </span></span>
-<span><span class="co">#&gt;  [65] evaluate_0.23               desc_1.4.3                 </span></span>
-<span><span class="co">#&gt;  [67] xml2_1.3.6                  circlize_0.4.16            </span></span>
-<span><span class="co">#&gt;  [69] pillar_1.9.0                affyio_1.73.0              </span></span>
-<span><span class="co">#&gt;  [71] BiocManager_1.30.22         MatrixGenerics_1.15.1      </span></span>
-<span><span class="co">#&gt;  [73] DT_0.33                     renv_1.0.7                 </span></span>
+<span><span class="co">#&gt;  [15] crayon_1.5.2                fastmap_1.2.0              </span></span>
+<span><span class="co">#&gt;  [17] magick_2.8.3                XVector_0.44.0             </span></span>
+<span><span class="co">#&gt;  [19] labeling_0.4.3              utf8_1.2.4                 </span></span>
+<span><span class="co">#&gt;  [21] rmarkdown_2.27              UCSC.utils_1.0.0           </span></span>
+<span><span class="co">#&gt;  [23] preprocessCore_1.66.0       ragg_1.3.2                 </span></span>
+<span><span class="co">#&gt;  [25] purrr_1.0.2                 xfun_0.45                  </span></span>
+<span><span class="co">#&gt;  [27] MultiAssayExperiment_1.30.1 zlibbioc_1.50.0            </span></span>
+<span><span class="co">#&gt;  [29] cachem_1.1.0                GenomeInfoDb_1.40.1        </span></span>
+<span><span class="co">#&gt;  [31] jsonlite_1.8.8              highr_0.11                 </span></span>
+<span><span class="co">#&gt;  [33] DelayedArray_0.30.1         BiocParallel_1.38.0        </span></span>
+<span><span class="co">#&gt;  [35] parallel_4.4.0              cluster_2.1.6              </span></span>
+<span><span class="co">#&gt;  [37] R6_2.5.1                    RColorBrewer_1.1-3         </span></span>
+<span><span class="co">#&gt;  [39] bslib_0.7.0                 stringi_1.8.4              </span></span>
+<span><span class="co">#&gt;  [41] ComplexUpset_1.3.3          limma_3.60.2               </span></span>
+<span><span class="co">#&gt;  [43] GenomicRanges_1.56.0        jquerylib_0.1.4            </span></span>
+<span><span class="co">#&gt;  [45] iterators_1.0.14            Rcpp_1.0.12                </span></span>
+<span><span class="co">#&gt;  [47] SummarizedExperiment_1.34.0 knitr_1.47                 </span></span>
+<span><span class="co">#&gt;  [49] IRanges_2.38.0              splines_4.4.0              </span></span>
+<span><span class="co">#&gt;  [51] Matrix_1.7-0                igraph_2.0.3               </span></span>
+<span><span class="co">#&gt;  [53] tidyselect_1.2.1            rstudioapi_0.16.0          </span></span>
+<span><span class="co">#&gt;  [55] abind_1.4-5                 yaml_2.3.8                 </span></span>
+<span><span class="co">#&gt;  [57] ggtext_0.1.2                doParallel_1.0.17          </span></span>
+<span><span class="co">#&gt;  [59] codetools_0.2-20            affy_1.82.0                </span></span>
+<span><span class="co">#&gt;  [61] lattice_0.22-6              tibble_3.2.1               </span></span>
+<span><span class="co">#&gt;  [63] plyr_1.8.9                  withr_3.0.0                </span></span>
+<span><span class="co">#&gt;  [65] Biobase_2.64.0              evaluate_0.24.0            </span></span>
+<span><span class="co">#&gt;  [67] desc_1.4.3                  xml2_1.3.6                 </span></span>
+<span><span class="co">#&gt;  [69] circlize_0.4.16             pillar_1.9.0               </span></span>
+<span><span class="co">#&gt;  [71] affyio_1.74.0               BiocManager_1.30.23        </span></span>
+<span><span class="co">#&gt;  [73] MatrixGenerics_1.16.0       DT_0.33                    </span></span>
 <span><span class="co">#&gt;  [75] foreach_1.5.2               stats4_4.4.0               </span></span>
 <span><span class="co">#&gt;  [77] MSnbase_2.30.1              MALDIquant_1.22.2          </span></span>
 <span><span class="co">#&gt;  [79] ncdf4_1.22                  generics_0.1.3             </span></span>
@@ -413,21 +413,21 @@ combined.</p>
 <span><span class="co">#&gt;  [83] munsell_0.5.1               scales_1.3.0               </span></span>
 <span><span class="co">#&gt;  [85] glue_1.7.0                  lazyeval_0.2.2             </span></span>
 <span><span class="co">#&gt;  [87] tools_4.4.0                 data.table_1.15.4          </span></span>
-<span><span class="co">#&gt;  [89] mzID_1.41.0                 QFeatures_1.13.7           </span></span>
-<span><span class="co">#&gt;  [91] vsn_3.71.1                  mzR_2.37.3                 </span></span>
+<span><span class="co">#&gt;  [89] mzID_1.42.0                 QFeatures_1.14.1           </span></span>
+<span><span class="co">#&gt;  [91] vsn_3.72.0                  mzR_2.38.0                 </span></span>
 <span><span class="co">#&gt;  [93] fs_1.6.4                    XML_3.99-0.16.1            </span></span>
-<span><span class="co">#&gt;  [95] grid_4.4.0                  impute_1.77.0              </span></span>
+<span><span class="co">#&gt;  [95] grid_4.4.0                  impute_1.78.0              </span></span>
 <span><span class="co">#&gt;  [97] tidyr_1.3.1                 crosstalk_1.2.1            </span></span>
-<span><span class="co">#&gt;  [99] MsCoreUtils_1.15.7          colorspace_2.1-0           </span></span>
+<span><span class="co">#&gt;  [99] MsCoreUtils_1.16.0          colorspace_2.1-0           </span></span>
 <span><span class="co">#&gt; [101] patchwork_1.2.0             GenomeInfoDbData_1.2.12    </span></span>
-<span><span class="co">#&gt; [103] PSMatch_1.7.2               cli_3.6.2                  </span></span>
-<span><span class="co">#&gt; [105] textshaping_0.3.7           fansi_1.0.6                </span></span>
-<span><span class="co">#&gt; [107] S4Arrays_1.3.7              ComplexHeatmap_2.20.0      </span></span>
-<span><span class="co">#&gt; [109] dplyr_1.1.4                 AnnotationFilter_1.27.0    </span></span>
-<span><span class="co">#&gt; [111] pcaMethods_1.95.0           gtable_0.3.5               </span></span>
+<span><span class="co">#&gt; [103] PSMatch_1.8.0               cli_3.6.2                  </span></span>
+<span><span class="co">#&gt; [105] textshaping_0.4.0           fansi_1.0.6                </span></span>
+<span><span class="co">#&gt; [107] S4Arrays_1.4.1              ComplexHeatmap_2.20.0      </span></span>
+<span><span class="co">#&gt; [109] dplyr_1.1.4                 AnnotationFilter_1.28.0    </span></span>
+<span><span class="co">#&gt; [111] pcaMethods_1.96.0           gtable_0.3.5               </span></span>
 <span><span class="co">#&gt; [113] sass_0.4.9                  digest_0.6.35              </span></span>
-<span><span class="co">#&gt; [115] BiocGenerics_0.49.1         SparseArray_1.3.5          </span></span>
-<span><span class="co">#&gt; [117] rjson_0.2.21                farver_2.1.1               </span></span>
+<span><span class="co">#&gt; [115] BiocGenerics_0.50.0         SparseArray_1.4.8          </span></span>
+<span><span class="co">#&gt; [117] rjson_0.2.21                farver_2.1.2               </span></span>
 <span><span class="co">#&gt; [119] htmlwidgets_1.6.4           memoise_2.0.1              </span></span>
 <span><span class="co">#&gt; [121] htmltools_0.5.8.1           pkgdown_2.0.9              </span></span>
 <span><span class="co">#&gt; [123] lifecycle_1.0.4             httr_1.4.7                 </span></span>

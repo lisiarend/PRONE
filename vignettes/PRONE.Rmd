@@ -25,14 +25,14 @@ This guide serves as an introduction to the PRONE R package, designed to facilit
 
 Beyond the scope of this introductory tutorial, PRONE encompassess a broad spectrum of functionalities, ranging from preprocessing steps, imputation, normalization and evaluation of the performance of different normalization techniques, to the identification of differentially expressed proteins. These functionalities are detailed in dedicated vignettes, offering detailed insights and instructions for leveraging full capabilities of the PRONE package:
 
-* [Preprocessing Tutorial](Preprocessing.Rmd)
-* [Imputation Tutorial](Imputation.Rmd)
-* [Normalization Tutorial](Normalization.Rmd)
-* [Differential Expression Tutorial](DifferentialExpression.Rmd)
+* [Preprocessing Tutorial](Preprocessing.html)
+* [Imputation Tutorial](Imputation.html)
+* [Normalization Tutorial](Normalization.html)
+* [Differential Expression Tutorial](Differential_Expression.html)
 
 Furthermore, PRONE provides additional functionalities for the analysis of spike-in data sets, which are detailed in the following vignette:
 
-* [Spike-In Tutorial](Spike_In_Data.Rmd)
+* [Spike-In Tutorial](Spike_In_Data.html)
 
 # Installation
 

@@ -93,10 +93,10 @@
 </h2>
 <p>This guide serves as an introduction to the PRONE R package, designed
 to facilitate the preparation of your data set for utilization of the
-PRONE’s functionalities. It begins by delineating the underlying data
-structure essential for the application of the package, followed by a
-brief description of how to apply different normalization techniques to
-your data. Additionally, this tutorial shows how to export the
+PRONE package’s functionalities. It begins by delineating the underlying
+data structure essential for the application of the package, followed by
+a brief description of how to apply different normalization techniques
+to your data. Additionally, this tutorial shows how to export the
 normalized data at the end.</p>
 <p>Beyond the scope of this introductory tutorial, PRONE encompassess a
 broad spectrum of functionalities, ranging from preprocessing steps,
@@ -106,17 +106,17 @@ expressed proteins. These functionalities are detailed in dedicated
 vignettes, offering detailed insights and instructions for leveraging
 full capabilities of the PRONE package:</p>
 <ul>
-<li><a href="Preprocessing.Rmd">Preprocessing Tutorial</a></li>
-<li><a href="Imputation.Rmd">Imputation Tutorial</a></li>
-<li><a href="Normalization.Rmd">Normalization Tutorial</a></li>
-<li><a href="DifferentialExpression.Rmd">Differential Expression
+<li><a href="Preprocessing.html">Preprocessing Tutorial</a></li>
+<li><a href="Imputation.html">Imputation Tutorial</a></li>
+<li><a href="Normalization.html">Normalization Tutorial</a></li>
+<li><a href="Differential_Expression.html">Differential Expression
 Tutorial</a></li>
 </ul>
 <p>Furthermore, PRONE provides additional functionalities for the
 analysis of spike-in data sets, which are detailed in the following
 vignette:</p>
 <ul>
-<li><a href="Spike_In_Data.Rmd">Spike-In Tutorial</a></li>
+<li><a href="Spike_In_Data.html">Spike-In Tutorial</a></li>
 </ul>
 </div>
 <div class="section level2">
@@ -139,7 +139,6 @@ the proteomics data set. Hence, before being able to execute the
 functionalities of PRONE, the data needs to be saved accordingly. For
 this, the <code><a href="../reference/load_data.html">load_data()</a></code> function was implemented and requires
 different parameters which are explained in the following:</p>
-<p>Then, different parameters need to be specified:</p>
 <ul>
 <li>
 <strong>data</strong>: refers to the data.frame containing the
@@ -265,9 +264,12 @@ dedicated vignettes.</p>
 <p>Finally, you can easily download the normalized data by using the
 <code><a href="../reference/export_data.html">export_data()</a></code>function. This function will save the
 specified assays as CSV files and the SummarizedExperiment object as an
-RDS file in a specified output directory.</p>
+RDS file in a specified output directory. Make sure that the output
+directory exists.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/export_data.html">export_data</a></span><span class="op">(</span><span class="va">se_norm</span>, out_dir <span class="op">=</span> <span class="st">"output/"</span>, ain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"log2"</span>, <span class="st">"Median"</span>, <span class="st">"LoessF"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="st">"output/"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"output/"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/export_data.html">export_data</a></span><span class="op">(</span><span class="va">se_norm</span>, out_dir <span class="op">=</span> <span class="st">"output/"</span>, ain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"log2"</span>, <span class="st">"Median"</span>, <span class="st">"LoessF"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
@@ -285,67 +287,67 @@ RDS file in a specified output directory.</p>
 <span><span class="co">#&gt; locale:</span></span>
 <span><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; time zone: Europe/Luxembourg</span></span>
+<span><span class="co">#&gt; time zone: Europe/Berlin</span></span>
 <span><span class="co">#&gt; tzcode source: internal</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
-<span><span class="co">#&gt; [1] stats     graphics  grDevices datasets  utils     methods   base     </span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
 <span><span class="co">#&gt; [1] PRONE_0.99.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] rlang_1.1.3                 magrittr_2.0.3             </span></span>
+<span><span class="co">#&gt;   [1] rlang_1.1.4                 magrittr_2.0.3             </span></span>
 <span><span class="co">#&gt;   [3] clue_0.3-65                 matrixStats_1.3.0          </span></span>
 <span><span class="co">#&gt;   [5] compiler_4.4.0              systemfonts_1.1.0          </span></span>
-<span><span class="co">#&gt;   [7] vctrs_0.6.5                 stringr_1.5.1              </span></span>
-<span><span class="co">#&gt;   [9] ProtGenerics_1.35.4         pkgconfig_2.0.3            </span></span>
-<span><span class="co">#&gt;  [11] crayon_1.5.2                fastmap_1.1.1              </span></span>
-<span><span class="co">#&gt;  [13] XVector_0.43.1              utf8_1.2.4                 </span></span>
-<span><span class="co">#&gt;  [15] rmarkdown_2.26              UCSC.utils_0.99.7          </span></span>
-<span><span class="co">#&gt;  [17] preprocessCore_1.65.0       ragg_1.3.0                 </span></span>
-<span><span class="co">#&gt;  [19] purrr_1.0.2                 xfun_0.43                  </span></span>
-<span><span class="co">#&gt;  [21] MultiAssayExperiment_1.29.1 zlibbioc_1.49.3            </span></span>
-<span><span class="co">#&gt;  [23] cachem_1.0.8                GenomeInfoDb_1.39.14       </span></span>
-<span><span class="co">#&gt;  [25] jsonlite_1.8.8              DelayedArray_0.29.9        </span></span>
-<span><span class="co">#&gt;  [27] BiocParallel_1.37.1         parallel_4.4.0             </span></span>
-<span><span class="co">#&gt;  [29] cluster_2.1.6               R6_2.5.1                   </span></span>
-<span><span class="co">#&gt;  [31] stringi_1.8.3               bslib_0.7.0                </span></span>
-<span><span class="co">#&gt;  [33] limma_3.59.10               GenomicRanges_1.55.4       </span></span>
-<span><span class="co">#&gt;  [35] jquerylib_0.1.4             iterators_1.0.14           </span></span>
-<span><span class="co">#&gt;  [37] Rcpp_1.0.12                 SummarizedExperiment_1.34.0</span></span>
-<span><span class="co">#&gt;  [39] knitr_1.46                  IRanges_2.37.1             </span></span>
-<span><span class="co">#&gt;  [41] Matrix_1.7-0                igraph_2.0.3               </span></span>
-<span><span class="co">#&gt;  [43] tidyselect_1.2.1            rstudioapi_0.16.0          </span></span>
-<span><span class="co">#&gt;  [45] abind_1.4-5                 yaml_2.3.8                 </span></span>
-<span><span class="co">#&gt;  [47] ggtext_0.1.2                doParallel_1.0.17          </span></span>
-<span><span class="co">#&gt;  [49] codetools_0.2-20            affy_1.81.0                </span></span>
-<span><span class="co">#&gt;  [51] lattice_0.22-6              tibble_3.2.1               </span></span>
-<span><span class="co">#&gt;  [53] plyr_1.8.9                  withr_3.0.0                </span></span>
-<span><span class="co">#&gt;  [55] Biobase_2.63.1              evaluate_0.23              </span></span>
-<span><span class="co">#&gt;  [57] desc_1.4.3                  xml2_1.3.6                 </span></span>
-<span><span class="co">#&gt;  [59] pillar_1.9.0                affyio_1.73.0              </span></span>
-<span><span class="co">#&gt;  [61] BiocManager_1.30.22         MatrixGenerics_1.15.1      </span></span>
-<span><span class="co">#&gt;  [63] renv_1.0.7                  foreach_1.5.2              </span></span>
+<span><span class="co">#&gt;   [7] vctrs_0.6.5                 reshape2_1.4.4             </span></span>
+<span><span class="co">#&gt;   [9] stringr_1.5.1               ProtGenerics_1.36.0        </span></span>
+<span><span class="co">#&gt;  [11] pkgconfig_2.0.3             crayon_1.5.2               </span></span>
+<span><span class="co">#&gt;  [13] fastmap_1.2.0               XVector_0.44.0             </span></span>
+<span><span class="co">#&gt;  [15] utf8_1.2.4                  rmarkdown_2.27             </span></span>
+<span><span class="co">#&gt;  [17] UCSC.utils_1.0.0            preprocessCore_1.66.0      </span></span>
+<span><span class="co">#&gt;  [19] ragg_1.3.2                  purrr_1.0.2                </span></span>
+<span><span class="co">#&gt;  [21] xfun_0.45                   MultiAssayExperiment_1.30.1</span></span>
+<span><span class="co">#&gt;  [23] zlibbioc_1.50.0             cachem_1.1.0               </span></span>
+<span><span class="co">#&gt;  [25] GenomeInfoDb_1.40.1         jsonlite_1.8.8             </span></span>
+<span><span class="co">#&gt;  [27] DelayedArray_0.30.1         BiocParallel_1.38.0        </span></span>
+<span><span class="co">#&gt;  [29] parallel_4.4.0              cluster_2.1.6              </span></span>
+<span><span class="co">#&gt;  [31] R6_2.5.1                    bslib_0.7.0                </span></span>
+<span><span class="co">#&gt;  [33] stringi_1.8.4               limma_3.60.2               </span></span>
+<span><span class="co">#&gt;  [35] GenomicRanges_1.56.0        jquerylib_0.1.4            </span></span>
+<span><span class="co">#&gt;  [37] iterators_1.0.14            Rcpp_1.0.12                </span></span>
+<span><span class="co">#&gt;  [39] SummarizedExperiment_1.34.0 knitr_1.47                 </span></span>
+<span><span class="co">#&gt;  [41] IRanges_2.38.0              Matrix_1.7-0               </span></span>
+<span><span class="co">#&gt;  [43] igraph_2.0.3                tidyselect_1.2.1           </span></span>
+<span><span class="co">#&gt;  [45] rstudioapi_0.16.0           abind_1.4-5                </span></span>
+<span><span class="co">#&gt;  [47] yaml_2.3.8                  ggtext_0.1.2               </span></span>
+<span><span class="co">#&gt;  [49] doParallel_1.0.17           codetools_0.2-20           </span></span>
+<span><span class="co">#&gt;  [51] affy_1.82.0                 lattice_0.22-6             </span></span>
+<span><span class="co">#&gt;  [53] tibble_3.2.1                plyr_1.8.9                 </span></span>
+<span><span class="co">#&gt;  [55] withr_3.0.0                 Biobase_2.64.0             </span></span>
+<span><span class="co">#&gt;  [57] evaluate_0.24.0             desc_1.4.3                 </span></span>
+<span><span class="co">#&gt;  [59] xml2_1.3.6                  pillar_1.9.0               </span></span>
+<span><span class="co">#&gt;  [61] affyio_1.74.0               BiocManager_1.30.23        </span></span>
+<span><span class="co">#&gt;  [63] MatrixGenerics_1.16.0       foreach_1.5.2              </span></span>
 <span><span class="co">#&gt;  [65] stats4_4.4.0                MSnbase_2.30.1             </span></span>
 <span><span class="co">#&gt;  [67] MALDIquant_1.22.2           ncdf4_1.22                 </span></span>
 <span><span class="co">#&gt;  [69] generics_0.1.3              S4Vectors_0.42.0           </span></span>
 <span><span class="co">#&gt;  [71] ggplot2_3.5.1               munsell_0.5.1              </span></span>
 <span><span class="co">#&gt;  [73] scales_1.3.0                glue_1.7.0                 </span></span>
 <span><span class="co">#&gt;  [75] lazyeval_0.2.2              tools_4.4.0                </span></span>
-<span><span class="co">#&gt;  [77] data.table_1.15.4           mzID_1.41.0                </span></span>
-<span><span class="co">#&gt;  [79] QFeatures_1.13.7            vsn_3.71.1                 </span></span>
-<span><span class="co">#&gt;  [81] mzR_2.37.3                  fs_1.6.4                   </span></span>
+<span><span class="co">#&gt;  [77] data.table_1.15.4           mzID_1.42.0                </span></span>
+<span><span class="co">#&gt;  [79] QFeatures_1.14.1            vsn_3.72.0                 </span></span>
+<span><span class="co">#&gt;  [81] mzR_2.38.0                  fs_1.6.4                   </span></span>
 <span><span class="co">#&gt;  [83] XML_3.99-0.16.1             grid_4.4.0                 </span></span>
-<span><span class="co">#&gt;  [85] impute_1.77.0               tidyr_1.3.1                </span></span>
-<span><span class="co">#&gt;  [87] MsCoreUtils_1.15.7          colorspace_2.1-0           </span></span>
-<span><span class="co">#&gt;  [89] GenomeInfoDbData_1.2.12     PSMatch_1.7.2              </span></span>
-<span><span class="co">#&gt;  [91] cli_3.6.2                   textshaping_0.3.7          </span></span>
-<span><span class="co">#&gt;  [93] fansi_1.0.6                 S4Arrays_1.3.7             </span></span>
-<span><span class="co">#&gt;  [95] dplyr_1.1.4                 AnnotationFilter_1.27.0    </span></span>
-<span><span class="co">#&gt;  [97] pcaMethods_1.95.0           gtable_0.3.5               </span></span>
+<span><span class="co">#&gt;  [85] impute_1.78.0               tidyr_1.3.1                </span></span>
+<span><span class="co">#&gt;  [87] MsCoreUtils_1.16.0          colorspace_2.1-0           </span></span>
+<span><span class="co">#&gt;  [89] GenomeInfoDbData_1.2.12     PSMatch_1.8.0              </span></span>
+<span><span class="co">#&gt;  [91] cli_3.6.2                   textshaping_0.4.0          </span></span>
+<span><span class="co">#&gt;  [93] fansi_1.0.6                 S4Arrays_1.4.1             </span></span>
+<span><span class="co">#&gt;  [95] dplyr_1.1.4                 AnnotationFilter_1.28.0    </span></span>
+<span><span class="co">#&gt;  [97] pcaMethods_1.96.0           gtable_0.3.5               </span></span>
 <span><span class="co">#&gt;  [99] sass_0.4.9                  digest_0.6.35              </span></span>
-<span><span class="co">#&gt; [101] BiocGenerics_0.49.1         SparseArray_1.3.5          </span></span>
+<span><span class="co">#&gt; [101] BiocGenerics_0.50.0         SparseArray_1.4.8          </span></span>
 <span><span class="co">#&gt; [103] htmlwidgets_1.6.4           memoise_2.0.1              </span></span>
 <span><span class="co">#&gt; [105] htmltools_0.5.8.1           pkgdown_2.0.9              </span></span>
 <span><span class="co">#&gt; [107] lifecycle_1.0.4             httr_1.4.7                 </span></span>
