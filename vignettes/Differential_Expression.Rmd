@@ -71,6 +71,8 @@ comparisons <- c("PTB-HC", "TBL-HC", "TBL-PTB", "Rx-PTB")
 
 The function `run_DE()` performs the DE analysis on the selected SummarizedExperiment and comparisons. DE analysis can be performed on multiple assays (normalization methods) at once using the already known "ain" parameter. The condition of the SummarizedExperiment object, specified at the beginning, can be used (condition = NULL) or any other column of the meta data can specified. Three methods are available for DE analysis: limma [@ritchie_limma_2015], DEqMS [@zhu_deqms:_2020], and ROTS [@suomi_rots:_2017]. The meaning of the other parameters can be extracted from the documentation of the method. 
 
+Attention! Due to current issues with DEqMS on Bioconductor and the ongoing submission of PRONE to Bioconductor, the main branch of PRONE no longer includes DEqMS functions. If you need to perform DEqMS, please use the with_DEqMS branch.
+
 ```{r}
 de_res <- run_DE(se = se_norm, 
                      comparisons = comparisons,
@@ -87,6 +89,7 @@ de_res <- run_DE(se = se_norm,
                      robust = TRUE,
                  ) 
 ```
+
 When running ROTS you need to specify the R and K parameters. In DEqMS, the DEqMS_PSMs_column need to be specified. This can be any column in the `rowData(se)`. For more information on the specific parameters, please refer to the method specific documentation.
 
 If you want to apply other logFC or p-value threshold, there is no need to re-run the DE analysis again. With `apply_thresholds()`, you can simply change the threshold values.

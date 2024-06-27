@@ -37,7 +37,6 @@ Imports:
     gtools,
     methods,
     ROTS,
-    DEqMS,
     ComplexUpset,
     tidyr,
     purrr,

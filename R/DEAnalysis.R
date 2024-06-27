@@ -226,131 +226,13 @@ perform_ROTS <- function(data, condition, comparisons, condition_name, coldata, 
   return(de_res)
 }
 
-
-#' Additional function of the DEqMS package
-#'
-#' @param fit linear model from function perform_limma
-#' @param coef_col an integer vector indicating the column(s) of fit$coefficients for which the function is to be performed. if not specified, all coefficients are used.
-#'
-#' @return list object
-#'
-spectraCounteBayes_DEqMS <- function(fit, coef_col){
-  logVAR <- log(fit$sigma^2)
-  df <- fit$df.residual
-  numgenes <- length(logVAR[df > 0])
-  df[df == 0] <- NA
-  eg <- logVAR - digamma(df/2) + log(df/2)
-  names(fit$count) <- rownames(fit$coefficients)
-  output <- fit
-  output$fit.method <- "loess"
-  #loess
-  x <- log2(fit$count)
-  loess.model <- stats:: loess(logVAR ~ x, span = 0.75, na.action = stats::na.exclude)
-  y.pred <- stats::fitted(loess.model)
-  output$model <- loess.model
-
-  egpred <- y.pred - digamma(df/2) + log(df/2)
-  myfct <- (eg - egpred)^2 - trigamma(df/2)
-  mean.myfct <- mean(myfct, na.rm = TRUE)
-  priordf <- vector()
-  testd0 <- vector()
-  for (i in seq(1, numgenes * 10)) {
-    testd0[i] <- i/10
-    priordf[i] <- abs(mean.myfct - trigamma(testd0[i]/2))
-    if (i > 2) {
-      if (priordf[i - 2] < priordf[i - 1]) {
-        break
-      }
-    }
-  }
-  d0 <- testd0[match(min(priordf), priordf)]
-  s02 <- exp(egpred + digamma(d0/2) - log(d0/2))
-  post.var <- (d0 * s02 + df * fit$sigma^2)/(d0 + df)
-  post.df <- d0 + df
-  sca.t <- as.matrix(fit$coefficients[, coef_col]/(fit$stdev.unscaled[,
-                                                                      coef_col] * sqrt(post.var)))
-  sca.p <- as.matrix(2 * stats::pt(abs(sca.t), post.df, lower.tail = FALSE))
-  output$sca.t <- sca.t
-  output$sca.p <- sca.p
-  output$sca.postvar <- post.var
-  output$sca.priorvar <- s02
-  output$sca.dfprior <- d0
-  return(output)
-}
-
-
-#' Perform DEqMS
-#'
-#' @param fit eBayes object resulting from perform_limma method
-#' @param se SummarizedExperiment containing all necessary information of the proteomics data set
-#' @param DEqMS_PSMs_column String specifying which column name to use for DEqMS (default NULL). Any column of the rowData(se) is accepted.
-#' @param logFC Boolean specifying whether to apply a logFC threshold (TRUE) or not (FALSE)
-#' @param logFC_up Upper log2 fold change threshold (dividing into up regulated)
-#' @param logFC_down Lower log2 fold change threshold (dividing into down regulated)
-#' @param p_adj Boolean specifying whether to apply a threshold on adjusted p-values (TRUE) or on raw p-values (FALSE)
-#' @param alpha Threshold for adjusted p-values or p-values
-#'
-#' @return data.table of DE results
-#'
-perform_DEqMS <- function(fit, se, DEqMS_PSMs_column = NULL, logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE, alpha = 0.05){
-  # check again DEqMS_PSMs_column
-  check_DEqMS_parameter(se, DEqMS_PSMs_column)
-
-  # create PSMs table
-  prot <- rownames(fit$coefficients)
-  rowdata <- data.table::as.data.table(SummarizedExperiment::rowData(se))
-  PSMs <- data.frame("PSMs" = rowdata[[DEqMS_PSMs_column]])
-  rownames(PSMs) <- rowdata$Protein.IDs
-  fit$count <- PSMs[prot, "PSMs"]
-  fit_DEqMS <- spectraCounteBayes_DEqMS(fit) # model variance
-
-  # create DEqMS results
-  DEqMS_results <- NULL
-  for (i in seq(length(colnames(fit_DEqMS$coefficients)))){
-    comp <- colnames(fit_DEqMS$coefficients)[i]
-    results <- DEqMS::outputResult(fit_DEqMS, coef_col = i)
-    results$ID <- row.names(results)
-    results$adj.P.Val <- results$sca.adj.pval
-    results$P.Value <- results$sca.P.Value
-    results <- results[, c("ID", "logFC", "AveExpr", "t", "P.Value", "adj.P.Val")]
-    results$Comparison <- comp
-    if(is.null(DEqMS_results)){
-      DEqMS_results <- results
-    } else {
-      DEqMS_results <- rbind(DEqMS_results, results)
-    }
-  }
-
-  if(logFC){
-    # logFC
-    if(p_adj){
-      # p.adjust
-      DEqMS_results$Change <- ifelse(DEqMS_results$logFC >= logFC_up & DEqMS_results$adj.P.Val <= alpha, "Up Regulated", ifelse(DEqMS_results$logFC <= logFC_down & DEqMS_results$adj.P.Val <= alpha, "Down Regulated", "No Change"))
-    } else {
-      # p.value
-      DEqMS_results$Change <- ifelse(DEqMS_results$logFC >= logFC_up & DEqMS_results$P.Value <= alpha, "Up Regulated", ifelse(DEqMS_results$logFC <= logFC_down & DEqMS_results$P.Value <= alpha, "Down Regulated", "No Change"))
-    }
-  } else {
-    # no logFC
-    if(p_adj){
-      # p.adjust
-      DEqMS_results$Change <- ifelse(DEqMS_results$adj.P.Val <= alpha, "Significant Change", "No Change")
-    } else {
-      # p.value
-      DEqMS_results$Change <- ifelse(DEqMS_results$P.Value <= alpha, "Significant Change", "No Change")
-    }
-  }
-  DEqMS_results$Change <- as.factor(DEqMS_results$Change)
-  return(data.table::as.data.table(DEqMS_results))
-}
-
 #' Run DE analysis on a single normalized data set
 #'
 #' @param se SummarizedExperiment containing all necessary information of the proteomics data set
 #' @param method String specifying which assay should be used as input
 #' @param comparisons Vector of comparisons that are performed in the DE analysis (from specify_comparisons method)
 #' @param condition column name of condition (if NULL, condition saved in SummarizedExperiment will be taken)
-#' @param DE_method String specifying which DE method should be applied (limma, ROTS, DEqMS)
+#' @param DE_method String specifying which DE method should be applied (limma, ROTS)
 #' @param covariate String specifying which column to include as covariate into limma
 #' @param logFC Boolean specifying whether to apply a logFC threshold (TRUE) or not (FALSE)
 #' @param logFC_up Upper log2 fold change threshold (dividing into up regulated)
@@ -361,13 +243,12 @@ perform_DEqMS <- function(fit, se, DEqMS_PSMs_column = NULL, logFC = TRUE, logFC
 #' @param K Number of top-ranked features for reproducibility optimization
 #' @param trend logical, should an intensity-dependent trend be allowed for the prior variance? If FALSE then the prior variance is constant. Alternatively, trend can be a row-wise numeric vector, which will be used as the covariate for the prior variance.
 #' @param robust logical, should the estimation of df.prior and var.prior be robustified against outlier sample variances?
-#' @param DEqMS_PSMs_column String specifying which column name to use for DEqMS (default NULL).  Any column of the rowData(se) is accepted.
 #'
 #' @return Data table of DE results
 #'
-run_DE_single <- function(se, method, comparisons, condition = NULL, DE_method = "limma", covariate = NULL, logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE, alpha = 0.05, B = 100, K = 500, trend = TRUE, robust = TRUE, DEqMS_PSMs_column = NULL){
+run_DE_single <- function(se, method, comparisons, condition = NULL, DE_method = "limma", covariate = NULL, logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE, alpha = 0.05, B = 100, K = 500, trend = TRUE, robust = TRUE){
   # check parameters (if users are calling this function instead of run_DE)
-  params <- check_DE_parameters(se, ain = method, condition = condition, comparisons = comparisons, DE_method = DE_method, covariate = covariate, logFC = logFC, logFC_up = logFC_up, logFC_down = logFC_down, p_adj = p_adj, alpha = alpha, B = B, K = K, DEqMS_PSMs_column = DEqMS_PSMs_column)
+  params <- check_DE_parameters(se, ain = method, condition = condition, comparisons = comparisons, DE_method = DE_method, covariate = covariate, logFC = logFC, logFC_up = logFC_up, logFC_down = logFC_down, p_adj = p_adj, alpha = alpha, B = B, K = K)
   method <- params[["ain"]]
   condition <- params[["condition"]]
 
@@ -390,10 +271,6 @@ run_DE_single <- function(se, method, comparisons, condition = NULL, DE_method =
   } else if (DE_method == "ROTS"){
     # run ROTS
     de_chunk <- perform_ROTS(data = dt, condition = condition, comparisons = comparisons, condition_name = condition, coldata = data.table::as.data.table(SummarizedExperiment::colData(se)), logFC = logFC, logFC_up = logFC_up, logFC_down = logFC_down, p_adj = p_adj, alpha = alpha, B = B, K = K)
-  } else if (DE_method == "DEqMS"){
-    # first run limma model
-    fit <- perform_limma(data = dt, condition_vector = condition_vector, comparisons = comparisons, covariate = covariate, trend = trend, robust = robust)
-    de_chunk <- perform_DEqMS(fit = fit, se = se, DEqMS_PSMs_column = DEqMS_PSMs_column, logFC = logFC, logFC_up = logFC_up, logFC_down = logFC_down, p_adj = p_adj, alpha = alpha)
   }
 
   # add other information
@@ -438,7 +315,7 @@ run_DE_single <- function(se, method, comparisons, condition = NULL, DE_method =
 #' @param ain Vector of strings which assay should be used as input (default NULL).
 #'            If NULL then all normalization of the se object are plotted next to each other.
 #' @param condition column name of condition (if NULL, condition saved in SummarizedExperiment will be taken)
-#' @param DE_method String specifying which DE method should be applied (limma, ROTS, DEqMS)
+#' @param DE_method String specifying which DE method should be applied (limma, ROTS)
 #' @param covariate String specifying which column to include as covariate into limma
 #' @param logFC Boolean specifying whether to apply a logFC threshold (TRUE) or not (FALSE)
 #' @param logFC_up Upper log2 fold change threshold (dividing into up regulated)
@@ -449,7 +326,6 @@ run_DE_single <- function(se, method, comparisons, condition = NULL, DE_method =
 #' @param K Number of top-ranked features for reproducibility optimization
 #' @param trend logical, should an intensity-dependent trend be allowed for the prior variance? If FALSE then the prior variance is constant. Alternatively, trend can be a row-wise numeric vector, which will be used as the covariate for the prior variance.
 #' @param robust logical, should the estimation of df.prior and var.prior be robustified against outlier sample variances?
-#' @param DEqMS_PSMs_column String specifying which column name to use for DEqMS (default NULL).  Any column of the rowData(se) is accepted.
 #'
 #' @return Data table of DE results of selected normalized data sets
 #' @export
@@ -463,7 +339,7 @@ run_DE_single <- function(se, method, comparisons, condition = NULL, DE_method =
 #'               logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE,
 #'               alpha = 0.05, B = 100, K = 500, trend = TRUE, robust = TRUE)
 #'
-run_DE <- function(se, comparisons, ain = NULL, condition = NULL, DE_method = "limma", covariate = NULL, logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE, alpha = 0.05, B = 100, K = 500, trend = TRUE, robust = TRUE, DEqMS_PSMs_column = NULL){
+run_DE <- function(se, comparisons, ain = NULL, condition = NULL, DE_method = "limma", covariate = NULL, logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE, alpha = 0.05, B = 100, K = 500, trend = TRUE, robust = TRUE){
   # check parameters
   params <- check_DE_parameters(se, ain = ain, condition = condition, comparisons = comparisons, DE_method = DE_method, covariate = covariate, logFC = logFC, logFC_up = logFC_up, logFC_down = logFC_down, p_adj = p_adj, alpha = alpha, B = B, K = K)
   ain <- params[["ain"]]
@@ -477,7 +353,7 @@ run_DE <- function(se, comparisons, ain = NULL, condition = NULL, DE_method = "l
   # run DE
   de_res <- NULL
   for(method in c(ain)){
-    de_chunk <- run_DE_single(se, method = method, condition = condition, comparisons = comparisons, DE_method = DE_method, covariate = covariate, logFC = logFC, logFC_up = logFC_up, logFC_down = logFC_down, p_adj = p_adj, alpha = alpha, B = B, K = K, trend = trend, robust = robust, DEqMS_PSMs_column = DEqMS_PSMs_column)
+    de_chunk <- run_DE_single(se, method = method, condition = condition, comparisons = comparisons, DE_method = DE_method, covariate = covariate, logFC = logFC, logFC_up = logFC_up, logFC_down = logFC_down, p_adj = p_adj, alpha = alpha, B = B, K = K, trend = trend, robust = robust)
     # add to overall results
     if(is.null(de_res)){
       de_res <- de_chunk
