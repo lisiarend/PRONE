@@ -255,25 +255,25 @@ plot_tot_int_samples <- function(se, ain="raw", color_by = NULL, label_by = NULL
 #' poma_res <- detect_outliers_POMA(tuberculosis_TMT_se, ain="raw",
 #'                                  condition = NULL, method="euclidean",
 #'                                  type="median", group=TRUE, coeff = 1.5)
-detect_outliers_POMA <- function(se, ain="raw", condition = NULL, method="euclidean", type="median", group=TRUE, coeff = 1.5){
+detect_outliers_POMA <- function(se, ain="log2", condition = NULL, method="euclidean", type="median", group=TRUE, coeff = 1.5){
 
   # get condition
   condition <- get_condition_value(se, condition)
+  
+  stopifnot(length(ain) == 1)
 
   # prepare data
   md <- data.table::as.data.table(SummarizedExperiment::colData(se))
   if(group){
     condition <- S4Vectors::metadata(se)$condition
-    md <- md %>% dplyr::select(dplyr::all_of(condition), dplyr::everything())
+    condition_vector <- md[[condition]]
   } else {
-    condition <- rep("complete",nrow(md))
-    md$Complete <- condition
-    md <- md %>% dplyr::select(dplyr::all_of("Complete"), dplyr::everything())
-
+    condition <- "complete"
+    condition_vector <- rep("complete",nrow(md))
   }
-  rownames(md) <- md$Column
-  md[[condition]] <- as.factor(md[[condition]])
-  data <- SummarizedExperiment::SummarizedExperiment(assays = SummarizedExperiment::assays(se)$log2, colData = md, rowData=SummarizedExperiment::rowData(se))
+  new_md <- data.table::data.table("Condition" = as.factor(condition_vector), "Column" = md$Column)
+  colnames(new_md)[1] <- condition
+  data <- SummarizedExperiment::SummarizedExperiment(assays = SummarizedExperiment::assays(se)[[ain]], colData = new_md, rowData=SummarizedExperiment::rowData(se))
   
   # perform POMA outlier detection
   poma_res <- POMA::PomaOutliers(data, method=method, type=type, coef = coeff)
@@ -286,8 +286,8 @@ detect_outliers_POMA <- function(se, ain="raw", condition = NULL, method="euclid
   # modify plots
   poma_res$polygon_plot <- poma_res$polygon_plot +
     ggplot2::scale_fill_manual(name = condition, values = col_vector) +
-    ggplot2::scale_color_manual(condition, values = c(rep("black", length(unique(md[, condition ]))))) +
-    ggplot2::scale_shape_manual(name = condition, values = seq_len(length(unique(md[, condition]))))
+    ggplot2::scale_color_manual(condition, values = c(rep("black", length(unique(md[[condition]]))))) +
+    ggplot2::scale_shape_manual(name = condition, values = seq_len(length(unique(md[[condition]]))))
 
   poma_res$distance_boxplot <- poma_res$distance_boxplot +
     ggplot2::scale_fill_manual(name = condition, values = col_vector) +

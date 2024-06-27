@@ -1017,7 +1017,7 @@ get_normalization_methods <- function(){
 #' Normalize SummarizedExperiment object using different normalization methods
 #'
 #' @param se SummarizedExperiment containing all necessary information of the proteomics data set
-#' @param methods Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_all_normalization_methods())
+#' @param methods Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_normalization_methods())
 #' @param on_raw Logical indicating if the normalization should be performed on the raw data or on log2-transformed data. If on_raw = NULL(default), the normalization is performed on the default method specific on_raw setting (suggestion based on publications).
 #' @param gamma.0 Numeric representing the exponent of the weighted density of RobNorm normalization. When the sample size is small, the fitted population of some proteins could be locally trapped such that the variance of those proteins was very small under a large gamma. To avoid this, a small gamma is recommended. When sample size smaller than 40, then set gamma to 0.5 or 0.1.
 #' @param reduce_correlation_by If the data is too big for the computation of the params, increase this parameter by 2,3,4.... The whole data will still be normalized, but the params are calculated on every second row etc.
@@ -1105,7 +1105,7 @@ normalize_se_single <- function(se, methods = NULL, on_raw = NULL, gamma.0 = 0.1
 #' Normalize SummarizedExperiment object using combinations of normalization methods
 #'
 #' @param se SummarizedExperiment containing all necessary information of the proteomics data set
-#' @param methods Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_all_normalization_methods())
+#' @param methods Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_normalization_methods())
 #' @param ains Vector of assays of SummarizedExperiment object to apply the normalization methods (e.g. if you want to perform Median normalization on IRS-normalized data)
 #' @param on_raw Logical indicating if the normalization should be performed on the raw data or on log2-transformed data. If on_raw = NULL(default), the normalization is performed on the default method specific on_raw setting (suggestion based on publications).
 #' @param combination_pattern String to give name to combination of methods (e.g. IRS_on_Median --> "_on_")
@@ -1191,7 +1191,7 @@ normalize_se_combination <- function(se, methods, ains, on_raw = NULL, combinati
 #' Normalize SummarizedExperiment object using single normalization methods or specified combinations of normalization methods
 #'
 #' @param se SummarizedExperiment containing all necessary information of the proteomics data set
-#' @param methods Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_all_normalization_methods())
+#' @param methods Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_normalization_methods())
 #' @param combination_pattern String specifying how normalization methods are combined. For instance, methods = c("IRS", "Median_on_IRS"), combination_pattern = "_on_".
 #' @param on_raw Logical indicating if the normalization should be performed on the raw data or on log2-transformed data. If on_raw = NULL(default), the normalization is performed on the default method specific on_raw setting (suggestion based on publications).
 #' @param gamma.0 Numeric representing the exponent of the weighted density of RobNorm normalization. When the sample size is small, the fitted population of some proteins could be locally trapped such that the variance of those proteins was very small under a large gamma. To avoid this, a small gamma is recommended. When sample size smaller than 40, then set gamma to 0.5 or 0.1.
