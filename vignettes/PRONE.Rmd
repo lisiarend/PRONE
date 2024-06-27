@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This guide serves as an introduction to the PRONE R package, designed to facilitate the preparation of your data set for utilization of the PRONE's functionalities. It begins by delineating the underlying data structure essential for the application of the package, followed by a brief description of how to apply different normalization techniques to your data. Additionally, this tutorial shows how to export the normalized data at the end.
+This guide serves as an introduction to the PRONE R package, designed to facilitate the preparation of your data set for utilization of the PRONE package's functionalities. It begins by delineating the underlying data structure essential for the application of the package, followed by a brief description of how to apply different normalization techniques to your data. Additionally, this tutorial shows how to export the normalized data at the end.
 
 Beyond the scope of this introductory tutorial, PRONE encompassess a broad spectrum of functionalities, ranging from preprocessing steps, imputation, normalization and evaluation of the performance of different normalization techniques, to the identification of differentially expressed proteins. These functionalities are detailed in dedicated vignettes, offering detailed insights and instructions for leveraging full capabilities of the PRONE package:
 
@@ -50,8 +50,6 @@ library("PRONE")
 # Load Data
 
 PRONE uses the [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) class as storage for protein intensities and meta data information on the proteomics data set. Hence, before being able to execute the functionalities of PRONE, the data needs to be saved accordingly. For this, the `load_data()` function was implemented and requires different parameters which are explained in the following: 
-
-Then, different parameters need to be specified:
 
 * __data__: refers to the data.frame containing the protein intensities
 * __md__: refers to the data.frame containing the meta-data information
@@ -136,9 +134,11 @@ Again, more information on the individual processes can be find in dedicated vig
 
 # Download Data
 
-Finally, you can easily download the normalized data by using the `export_data()`function. This function will save the specified assays as CSV files and the SummarizedExperiment object as an RDS file in a specified output directory.
+Finally, you can easily download the normalized data by using the `export_data()`function. This function will save the specified assays as CSV files and the SummarizedExperiment object as an RDS file in a specified output directory. Make sure that the output directory exists.
 
 ```{r, eval = FALSE}
+if(!dir.exists("output/")) dir.create("output/")
+
 export_data(se_norm, out_dir = "output/", ain = c("log2", "Median", "LoessF"))
 ```
 

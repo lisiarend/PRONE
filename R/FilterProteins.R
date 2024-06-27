@@ -9,9 +9,9 @@
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
-#' tuberulosis_TMT_se <- filter_complete_NA_proteins(tuberculosis_TMT_se)
+#' tuberulosis_TMT_se <- filter_out_complete_NA_proteins(tuberculosis_TMT_se)
 #'
-filter_complete_NA_proteins <- function(se){
+filter_out_complete_NA_proteins <- function(se){
   # find proteins that only have NAs
   dt <- data.table::as.data.table(SummarizedExperiment::assays(se)[["raw"]])
   row_idx_no_NA <- rowSums(is.na(dt)) != ncol(dt)
@@ -40,10 +40,10 @@ filter_complete_NA_proteins <- function(se){
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
-#' tuberculosis_TMT_se <- filter_proteins_by_value(tuberculosis_TMT_se,
+#' tuberculosis_TMT_se <- filter_out_proteins_by_value(tuberculosis_TMT_se,
 #'                                  column_name = "Reverse", values = c("+"))
 #'
-filter_proteins_by_value <- function(se, column_name = "Reverse", values = c("+")){
+filter_out_proteins_by_value <- function(se, column_name = "Reverse", values = c("+")){
   rd <- data.table::as.data.table(SummarizedExperiment::rowData(se))
   if(column_name %in% colnames(rd)){
     rd_subset <- rd[! rd[, column_name] %in% c(values),]
@@ -95,7 +95,7 @@ get_proteins_by_value <- function(se, column_name = "Reverse", values = c("+")){
   }
 }
 
-#' Filter proteins by their ID
+#' Remove proteins by their ID
 #'
 #' @param se SummarizedExperiment containing all necessary information of the proteomics data set
 #' @param protein_ids Vector of protein IDs that should be kept
@@ -105,10 +105,10 @@ get_proteins_by_value <- function(se, column_name = "Reverse", values = c("+")){
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
-#' tuberculosis_TMT_se <- filter_proteins_by_ID(tuberculosis_TMT_se,
+#' tuberculosis_TMT_se <- filter_out_proteins_by_ID(tuberculosis_TMT_se,
 #'                                 protein_ids = c("P0A8V2", "P0A8V2"))
 #'
-filter_proteins_by_ID <- function(se, protein_ids){
+filter_out_proteins_by_ID <- function(se, protein_ids){
   rd <- data.table::as.data.table(SummarizedExperiment::rowData(se))
   rd_subset <- rd[!rd$Protein.IDs %in% protein_ids,]
   se_subset <- se[rd_subset$ID, ]
@@ -133,10 +133,10 @@ filter_proteins_by_ID <- function(se, protein_ids){
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
-#' tuberculosis_TMT_se <- filter_NA_proteins_by_threshold(tuberculosis_TMT_se,
+#' tuberculosis_TMT_se <- filter_out_NA_proteins_by_threshold(tuberculosis_TMT_se,
 #'                                                        thr = 0.8)
 #'
-filter_NA_proteins_by_threshold <- function(se, thr = 0.8){
+filter_out_NA_proteins_by_threshold <- function(se, thr = 0.8){
   # prepare data
   dt <- data.table::as.data.table(SummarizedExperiment::assays(se)[["raw"]])
   dt$ID <- SummarizedExperiment::rowData(se)$Protein.IDs

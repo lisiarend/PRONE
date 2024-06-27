@@ -83,7 +83,7 @@ p[[1]] + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 
 ## Remove Proteins With Missing Values in ALL Samples
 
 ```{r}
-se <- filter_complete_NA_proteins(se)
+se <- filter_out_complete_NA_proteins(se)
 ```
 
 ## Remove Proteins With a Specific Value in a Specific Column
@@ -91,18 +91,18 @@ se <- filter_complete_NA_proteins(se)
 Typically proteins with "+" in the columns "Reverse", "Only.identified.by.site", and "Potential.contaminant" are removed in case of a MaxQuant proteinGroups.txt output file.
 
 ```{r}
-se <- filter_proteins_by_value(se, "Reverse", "+")
-se <- filter_proteins_by_value(se, "Only.identified.by.site", "+")
-#se <- filter_proteins_by_value(se, "Potential.contaminant", "+")
+se <- filter_out_proteins_by_value(se, "Reverse", "+")
+se <- filter_out_proteins_by_value(se, "Only.identified.by.site", "+")
+#se <- filter_out_proteins_by_value(se, "Potential.contaminant", "+")
 ```
 
 ## Remove Proteins by ID
 
-If you don't want to remove for instance all proteins with "Potential.contaminant == +", you can also first get the protein ID with the specific value, check them in Uniprot, and then remove only some by using the function `filter_proteins_by_ID()`.
+If you don't want to remove for instance all proteins with "Potential.contaminant == +", you can also first get the protein ID with the specific value, check them in Uniprot, and then remove only some by using the function `filter_out_proteins_by_ID()`.
 
 ```{r} 
 pot_contaminants <- get_proteins_by_value(se, "Potential.contaminant", "+")
-se <- filter_proteins_by_ID(se, pot_contaminants)
+se <- filter_out_proteins_by_ID(se, pot_contaminants)
 ```
 
 ## Explore Missing Value Pattern
@@ -125,10 +125,10 @@ plot_NA_frequency(se)
 
 ## Filter Proteins By Applying a Missing Value Threshold
 
-To reduce the amount of missing values, it is possible to filter proteins by applying a missing value threshold. The function `filter_NA_proteins_by_threshold()` removes proteins with more missing values than the specified threshold. The threshold is a value between 0 and 1, where 0.7, for instance, means that proteins with less than 70% of real values will be removed, i.e., proteins with more than 30% missing values will be removed.
+To reduce the amount of missing values, it is possible to filter proteins by applying a missing value threshold. The function `filter_out_NA_proteins_by_threshold()` removes proteins with more missing values than the specified threshold. The threshold is a value between 0 and 1, where 0.7, for instance, means that proteins with less than 70% of real values will be removed, i.e., proteins with more than 30% missing values will be removed.
 
 ```{r}
-se <- filter_NA_proteins_by_threshold(se, thr = 0.7) 
+se <- filter_out_NA_proteins_by_threshold(se, thr = 0.7) 
 
 plot_NA_heatmap(se)
 ```
