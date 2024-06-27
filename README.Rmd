@@ -37,12 +37,22 @@ To install the package, run:
 ```{r, eval = FALSE}
   # Install PRONE.R from github and build vignettes
   if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-  devtools::install_github("lisiarend/PRONE.R", build_vignettes = TRUE, dependencies = TRUE)
-  # Load and attach PRONE.R 
+  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE)
+  
+  # Load and attach PRONE 
   library("PRONE")
   
   # TODO: bioconductor installation
 ```
+
+Due to current issues with DEqMS on Bioconductor and the ongoing submission of PRONE to Bioconductor, the main branch of PRONE no longer includes DEqMS functions. If you need to perform DEqMS, please use the with_DEqMS branch.
+
+```{r, eval = FALSE}
+  # Install PRONE.R from github and build vignettes
+  if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE, ref = "with_DEqMS")
+```
+
 
 ## Workflow
 
@@ -59,7 +69,7 @@ The evaluation of DE results of real-world experiments is based on visual qualit
 
 ## Usage
 
-To get familiar with the functionalities of the R package, check out the article [Getting started with PRONE](https://github.com/lisiarend/PRONE.R/inst/vignettes/PRONE.R.Rmd).
+To get familiar with the functionalities of the R package, check out the article [Getting started with PRONE](https://lisiarend.github.io/PRONE/articles/PRONE.html).
 
 
 ## Citation

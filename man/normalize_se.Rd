@@ -19,7 +19,7 @@ normalize_se(
 \arguments{
 \item{se}{SummarizedExperiment containing all necessary information of the proteomics data set}
 
-\item{methods}{Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_all_normalization_methods())}
+\item{methods}{Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_normalization_methods())}
 
 \item{combination_pattern}{String specifying how normalization methods are combined. For instance, methods = c("IRS", "Median_on_IRS"), combination_pattern = "_on_".}
 

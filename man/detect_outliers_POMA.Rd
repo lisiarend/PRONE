@@ -6,7 +6,7 @@
 \usage{
 detect_outliers_POMA(
   se,
-  ain = "raw",
+  ain = "log2",
   condition = NULL,
   method = "euclidean",
   type = "median",

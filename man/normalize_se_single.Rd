@@ -18,7 +18,7 @@ normalize_se_single(
 \arguments{
 \item{se}{SummarizedExperiment containing all necessary information of the proteomics data set}
 
-\item{methods}{Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_all_normalization_methods())}
+\item{methods}{Vector of normalization methods to apply for normalizing the proteomics data of the SummarizedExperiment object (identifier of normalization methods can be retrieved using get_normalization_methods())}
 
 \item{on_raw}{Logical indicating if the normalization should be performed on the raw data or on log2-transformed data. If on_raw = NULL(default), the normalization is performed on the default method specific on_raw setting (suggestion based on publications).}
 
