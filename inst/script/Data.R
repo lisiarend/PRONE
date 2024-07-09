@@ -15,7 +15,7 @@ ref_samples <- md[md$Group == "ref",]$Column
 
 tuberculosis_TMT_se <- load_data(data, md, protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = ref_samples, batch_column = "Pool", condition_column = "Group", label_column = "Label")
 
-# Spike-in Data 
+# Spike-in Data (Only relevant columns included)
 # @source Jürgen Cox, Marco Y. Hein, Christian A. Luber, Igor Paron, Nagarjuna Nagaraj, and Matthias Mann.Accurate Proteome-wide Label-free Quantification by Delayed Normalization and Maximal Peptide Ratio Extraction, Termed MaxLFQ. Molecular & Cellular Proteomics 13.9 (Sept. 2014), pp. 2513–2526. <https://doi.org/10.1074/mcp.M113.031591>.
 
 data_path <- readPRONE_example("spike_in_proteinGroups.txt")
