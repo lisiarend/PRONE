@@ -1,0 +1,7 @@
+"Column","Label","Replicate","Condition","Condtion","Concentration"
+"LFQ.intensity.H1","H1","1","H","H",30
+"LFQ.intensity.H2","H2","2","H","H",30
+"LFQ.intensity.H3","H3","3","H","H",30
+"LFQ.intensity.L1","L1","1","L","L",10
+"LFQ.intensity.L2","L2","2","L","L",10
+"LFQ.intensity.L3","L3","3","L","L",10

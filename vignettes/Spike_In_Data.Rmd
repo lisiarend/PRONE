@@ -36,11 +36,11 @@ Initially, the spike-in data set needs to be imported into a SummarizedExperimen
 Here, the "spike_column" denotes the column in the protein intensity data file encompassing information whether a proteins is classified as spike-in or background protein. The "spike_value" determines the value/identifier that is used to identify the spike-in proteins in the "spike_column", and the "spike_concentration" identifies the column containing the concentration values of the spike-in proteins (in this case the different conditions that will be tested in DE analysis).
 
 ```{r}
-data_path <- readPRONE_example("spike_in_proteinGroups.txt")
-md_path <- readPRONE_example("spike_in_metadata.txt")
+data_path <- readPRONE_example("Ecoli_human_MaxLFQ_protein_intensities.csv")
+md_path <- readPRONE_example("Ecoli_human_MaxLFQ_metadata.csv")
 
-data <- read.csv(data_path, sep = "\t")
-md <- read.csv(md_path, sep = "\t")
+data <- read.csv(data_path)
+md <- read.csv(md_path)
 
 # Check if some protein groups are mixed
 mixed <- grepl("Homo sapiens.*Escherichia|Escherichia.*Homo sapiens", data$Fasta.headers)

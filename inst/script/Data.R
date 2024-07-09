@@ -3,26 +3,26 @@
 # Tuberculosis TMT data 
 # @source Biadglegne et al. Mycobacterium tuberculosis Affects Protein and Lipid Content of Circulating Exosomes in Infected Patients Depending on Tuberculosis Disease State. Biomedicines 10.4 (Mar. 2022), p. 783. doi: 10.3390/ biomedicines10040783.
 
-data_path <- readPRONE_example("tuberculosis_TMT_proteinGroups.txt")
-md_path <- readPRONE_example("tuberculosis_TMT_metadata.txt")
+data_path <- readPRONE_example("tuberculosis_protein_intensities.csv")
+md_path <- readPRONE_example("tuberculosis_metadata.csv")
 
-data <- read.csv(data_path, sep ="\t")
-md <- read.csv(md_path, sep = "\t")
+data <- read.csv(data_path)
+md <- read.csv(md_path)
 md$Group <- plyr::mapvalues(md$Group, from=c("Common.reference","Healthy.control", "Pulmonary.tuberculosis", "Tuberculous.lymphadenitis", "Treated.pulmonary.tuberculosis"), to = c("ref", "HC", "PTB", "TBL", "Rx"))
 md$Column <- stringr::str_replace_all(md$Column, " ", ".")
 
 ref_samples <- md[md$Group == "ref",]$Column
 
-tuberculosis_TMT_se <- load_data(data, md, protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = ref_samples, batch_column = "Pool", condition_column = "Group", label_column = "Label")
+tuberculosis_TMT_se <- load_data(data, md, protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = ref_samples, batch_column = "Batch", condition_column = "Condition", label_column = "Label")
 
-# Spike-in Data (Only relevant columns included)
+# Spike-in Data (Only relevant columns included and subsampled to 1000 proteins due to size restriction)
 # @source Jürgen Cox, Marco Y. Hein, Christian A. Luber, Igor Paron, Nagarjuna Nagaraj, and Matthias Mann.Accurate Proteome-wide Label-free Quantification by Delayed Normalization and Maximal Peptide Ratio Extraction, Termed MaxLFQ. Molecular & Cellular Proteomics 13.9 (Sept. 2014), pp. 2513–2526. <https://doi.org/10.1074/mcp.M113.031591>.
 
-data_path <- readPRONE_example("spike_in_proteinGroups.txt")
-md_path <- readPRONE_example("spike_in_metadata.txt")
+data_path <- readPRONE_example("Ecoli_human_MaxLFQ_protein_intensities.csv")
+md_path <- readPRONE_example("Ecoli_human_MaxLFQ_metadata.csv")
 
-data <- read.csv(data_path, sep = "\t")
-md <- read.csv(md_path, sep = "\t")
+data <- read.csv(data_path)
+md <- read.csv(md_path)
 
 # Check if some protein groups are mixed
 mixed <- grepl("Homo sapiens.*Escherichia|Escherichia.*Homo sapiens", data$Fasta.headers)

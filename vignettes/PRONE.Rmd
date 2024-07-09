@@ -70,15 +70,15 @@ If you have a TMT data set with samples being measured in different batches than
 The example TMT data set originates from [@biadglegne_mycobacterium_2022].
 
 ```{r load_real_tmt}
-data_path <- readPRONE_example("tuberculosis_TMT_proteinGroups.txt")
-md_path <- readPRONE_example("tuberculosis_TMT_metadata.txt")
+data_path <- readPRONE_example("tuberculosis_protein_intensities.csv")
+md_path <- readPRONE_example("tuberculosis_metadata.csv")
 
-data <- read.csv(data_path, sep ="\t")
-md <- read.csv(md_path, sep = "\t")
+data <- read.csv(data_path)
+md <- read.csv(md_path)
 
 md$Column <- stringr::str_replace_all(md$Column, " ", ".")
 
-ref_samples <- md[md$Group == "Common.reference",]$Column
+ref_samples <- md[md$Group == "ref",]$Column
 
 se <- load_data(data, md, protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = ref_samples, batch_column = "Pool", condition_column = "Group", label_column = "Label")
 
@@ -89,15 +89,13 @@ se <- load_data(data, md, protein_column = "Protein.IDs", gene_column = "Gene.na
 The example data set originates from [@vehmas_liver_2016]. This data set is used for the subsequent examples in this tutorial.
 
 ```{r load_real_lfq}
-data_path <- readPRONE_example("MouseP450_LFQ_protein_table.csv")
-data <- read.csv(data_path, row.names = 1)
+data_path <- readPRONE_example("mouse_liver_cytochrome_P450_protein_intensities.csv")
+md_path <- readPRONE_example("mouse_liver_cytochrome_P450_metadata.csv")
 
-# Create metadata (since it was not given)
-md <- data.frame(Column = colnames(data)[seq_len((ncol(data)-2))])
-md$Animal <- sapply(strsplit(as.character(md$Column),"_"), "[", 1)
-md$Condition <- sapply(strsplit(as.character(md$Column),"_"), "[", 2)
+data <- read.csv(data_path, check.names = FALSE)
+md <- read.csv(md_path)
 
-se <- load_data(data, md, protein_column = "Accession", gene_column = NULL, ref_samples = NULL, batch_column = NULL, condition_column = "Condition", label_column = NULL)
+se <- load_data(data, md, protein_column = "Accession", gene_column = "Gene names", ref_samples = NULL, batch_column = NULL, condition_column = "Condition", label_column = NULL)
 ```
 
 # Data Structure
