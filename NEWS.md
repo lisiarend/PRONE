@@ -1,3 +1,7 @@
+# PRONE 0.99.3
+
+* Load_data examples bug resolved
+
 
 # PRONE 0.99.2
 
