@@ -3,7 +3,7 @@
 \docType{data}
 \name{tuberculosis_TMT_de_res}
 \alias{tuberculosis_TMT_de_res}
-\title{Example data.table of DE results of of a real-world proteomics data set}
+\title{Example data.table of DE results of a real-world proteomics data set}
 \format{
 An object of class \code{data.table} (inherits from \code{data.frame}) with 9030 rows and 9 columns.
 }

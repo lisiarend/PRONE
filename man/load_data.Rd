@@ -39,12 +39,12 @@ SummarizedExperiment object
 Load real-world proteomics data into a SummarizedExperiment
 }
 \examples{
-data_path <- readPRONE_example("tuberculosis_TMT_proteinGroups.txt")
-md_path <- readPRONE_example("tuberculosis_TMT_metadata.txt")
-data <- read.csv(data_path, sep ="\t")
-md <- read.csv(md_path, sep = "\t")
+data_path <- readPRONE_example("tuberculosis_protein_intensities.csv")
+md_path <- readPRONE_example("tuberculosis_metadata.csv")
+data <- read.csv(data_path)
+md <- read.csv(md_path)
 md$Column <- stringr::str_replace_all(md$Column, " ", ".")
-ref_samples <- md[md$Group == "Common.reference",]$Column
+ref_samples <- md[md$Group == "ref",]$Column
 se <- load_data(data, md, protein_column = "Protein.IDs",
                gene_column = "Gene.names", ref_samples = ref_samples,
                batch_column = "Pool", condition_column = "Group",

@@ -5,7 +5,7 @@
 \alias{spike_in_se}
 \title{Example SummarizedExperiment of a spike-in proteomics data set}
 \format{
-An object of class \code{SummarizedExperiment} with 6694 rows and 6 columns.
+An object of class \code{SummarizedExperiment} with 1500 rows and 6 columns.
 }
 \source{
 Jürgen Cox, Marco Y. Hein, Christian A. Luber, Igor Paron, Nagarjuna Nagaraj, and Matthias Mann.Accurate Proteome-wide Label-free Quantification by Delayed Normalization and Maximal Peptide Ratio Extraction, Termed MaxLFQ. Molecular & Cellular Proteomics 13.9 (Sept. 2014), pp. 2513–2526. <https://doi.org/10.1074/mcp.M113.031591>.
@@ -14,6 +14,6 @@ Jürgen Cox, Marco Y. Hein, Christian A. Luber, Igor Paron, Nagarjuna Nagaraj, a
 spike_in_se
 }
 \description{
-A \code{SummarizedExperiment} containing the raw and log2-scaled data of 301 proteins measured in 20 samples
+A \code{SummarizedExperiment} containing the raw and log2-scaled data of 301 proteins measured in 20 samples. Due to size restriction, we only included the relevant columns of the original proteinGroups.txt of MaxQuant.
 }
 \keyword{datasets}

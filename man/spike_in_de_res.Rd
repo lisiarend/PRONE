@@ -3,9 +3,9 @@
 \docType{data}
 \name{spike_in_de_res}
 \alias{spike_in_de_res}
-\title{Example data.table of DE results of of a spike-in proteomics data set}
+\title{Example data.table of DE results of a spike-in proteomics data set}
 \format{
-An object of class \code{data.table} (inherits from \code{data.frame}) with 33470 rows and 10 columns.
+An object of class \code{data.table} (inherits from \code{data.frame}) with 7500 rows and 10 columns.
 }
 \source{
 Jürgen Cox, Marco Y. Hein, Christian A. Luber, Igor Paron, Nagarjuna Nagaraj, and Matthias Mann.Accurate Proteome-wide Label-free Quantification by Delayed Normalization and Maximal Peptide Ratio Extraction, Termed MaxLFQ. Molecular & Cellular Proteomics 13.9 (Sept. 2014), pp. 2513–2526. <https://doi.org/10.1074/mcp.M113.031591>.

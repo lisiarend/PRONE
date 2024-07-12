@@ -1,7 +1,7 @@
 Package: PRONE
 Type: Package
 Title: Normalization and Analysis of Proteomics Data
-Version: 0.99.3
+Version: 0.99.4
 Authors@R: c(person("Lis", "Arend", email = "lis.arend@tum.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7990-8385")))
 Description: High-throughput omics data are often affected by systematic biases introduced throughout all the steps of a clinical study, from sample collection to quantification. 
   Normalization methods aim to adjust for these biases to make the actual biological signal more prominent. 
@@ -12,7 +12,7 @@ Description: High-throughput omics data are often affected by systematic biases 
   Spike-in data sets with known ground truth and real-world data sets of biological experiments acquired by either tandem mass tag (TMT) or label-free quantification (LFQ) can be analyzed.
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 LazyData: true
 LazyDataCompression: xz
 Depends: R (>= 4.4.0)
