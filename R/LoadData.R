@@ -15,12 +15,12 @@
 #' @export
 #'
 #' @examples
-#' data_path <- readPRONE_example("tuberculosis_TMT_proteinGroups.txt")
-#' md_path <- readPRONE_example("tuberculosis_TMT_metadata.txt")
-#' data <- read.csv(data_path, sep ="\t")
-#' md <- read.csv(md_path, sep = "\t")
+#' data_path <- readPRONE_example("tuberculosis_protein_intensities.csv")
+#' md_path <- readPRONE_example("tuberculosis_metadata.csv")
+#' data <- read.csv(data_path)
+#' md <- read.csv(md_path)
 #' md$Column <- stringr::str_replace_all(md$Column, " ", ".")
-#' ref_samples <- md[md$Group == "Common.reference",]$Column
+#' ref_samples <- md[md$Group == "ref",]$Column
 #' se <- load_data(data, md, protein_column = "Protein.IDs",
 #'                gene_column = "Gene.names", ref_samples = ref_samples,
 #'                batch_column = "Pool", condition_column = "Group",
@@ -93,22 +93,15 @@ load_data <- function(data, md, protein_column = "Protein.IDs", gene_column = "G
 #' @export
 #'
 #' @examples
-#' data_path <- readPRONE_example("spike_in_proteinGroups.txt")
-#' md_path <- readPRONE_example("spike_in_metadata.txt")
-#' data <- read.csv(data_path, sep = "\t")
-#' md <- read.csv(md_path, sep = "\t")
-#' # Check if some protein groups are mixed
+#' data_path <- readPRONE_example("Ecoli_human_MaxLFQ_protein_intensities.csv")
+#' md_path <- readPRONE_example("Ecoli_human_MaxLFQ_metadata.csv")
+#' data <- read.csv(data_path)
+#' md <- read.csv(md_path)
 #' mixed <- grepl("Homo sapiens.*Escherichia|Escherichia.*Homo sapiens", data$Fasta.headers)
 #' data <- data[!mixed,]
 #' data$Spiked <- rep("HUMAN", nrow(data))
 #' data$Spiked[grepl("ECOLI", data$Fasta.headers)] <- "ECOLI"
-#' se <- load_spike_data(data, md, spike_column = "Spiked",
-#'                       spike_value = "ECOLI",
-#'                       spike_concentration = "Concentration",
-#'                       protein_column = "Protein.IDs",
-#'                       gene_column = "Gene.names", ref_samples = NULL,
-#'                       batch_column = NULL,
-#'                       condition_column = "Condition", label_column = "Label")
+#' se <- load_spike_data(data, md, spike_column = "Spiked", spike_value = "ECOLI", spike_concentration = "Concentration",protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = NULL, batch_column = NULL, condition_column = "Condition", label_column = "Label")
 #'
 load_spike_data <- function(data, md, spike_column, spike_value, spike_concentration, protein_column = "Protein.IDs", gene_column = "Gene.Names", ref_samples = NULL, batch_column = NULL, condition_column = NULL, label_column = NULL){
   # convert to data.table
