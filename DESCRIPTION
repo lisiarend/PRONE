@@ -21,6 +21,7 @@ Imports:
     SummarizedExperiment,
     magrittr,
     data.table,
+    DEqMS,
     RColorBrewer,
     ggplot2,
     S4Vectors,
