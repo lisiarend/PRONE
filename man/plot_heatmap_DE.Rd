@@ -11,7 +11,8 @@ plot_heatmap_DE(
   comparison,
   condition = NULL,
   label_by = NULL,
-  pvalue_column = "adj.P.Val"
+  pvalue_column = "adj.P.Val",
+  col_vector = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plot_heatmap_DE(
 \item{label_by}{String specifying the column to label the samples (If NULL, the labels column of the SummarizedExperiment object is used. If "No", no labeling of samples done.)}
 
 \item{pvalue_column}{column name of p-values in de_res}
+
+\item{col_vector}{Vector of colors to use for the heatmap. If NULL, default colors are used.}
 }
 \value{
 list of ComplexHeatmaps for each method
@@ -41,6 +44,6 @@ data(tuberculosis_TMT_de_res)
 plot_heatmap_DE(tuberculosis_TMT_se, tuberculosis_TMT_de_res, ain = NULL,
                 comparison = "PTB-HC",
                 condition = NULL, label_by = NULL,
-                pvalue_column = "adj.P.Val")
+                pvalue_column = "adj.P.Val", col_vector = NULL)
 
 }

@@ -97,6 +97,7 @@ plot_volcano_DE <- function(de_res, ain = NULL, comparisons = NULL, facet_norm =
 #' @param condition column name of condition (if NULL, condition saved in SummarizedExperiment will be taken)
 #' @param label_by String specifying the column to label the samples (If NULL, the labels column of the SummarizedExperiment object is used. If "No", no labeling of samples done.)
 #' @param pvalue_column column name of p-values in de_res
+#' @param col_vector Vector of colors to use for the heatmap. If NULL, default colors are used.
 #'
 #' @return list of ComplexHeatmaps for each method
 #' @export
@@ -107,9 +108,9 @@ plot_volcano_DE <- function(de_res, ain = NULL, comparisons = NULL, facet_norm =
 #' plot_heatmap_DE(tuberculosis_TMT_se, tuberculosis_TMT_de_res, ain = NULL,
 #'                 comparison = "PTB-HC",
 #'                 condition = NULL, label_by = NULL,
-#'                 pvalue_column = "adj.P.Val")
+#'                 pvalue_column = "adj.P.Val", col_vector = NULL)
 #'
-plot_heatmap_DE <- function(se, de_res, ain, comparison, condition = NULL, label_by = NULL, pvalue_column = "adj.P.Val"){
+plot_heatmap_DE <- function(se, de_res, ain, comparison, condition = NULL, label_by = NULL, pvalue_column = "adj.P.Val", col_vector = NULL){
   # check parameters
   if(length(comparison) != 1){
     stop("Only one comparison as input!")
@@ -153,11 +154,12 @@ plot_heatmap_DE <- function(se, de_res, ain, comparison, condition = NULL, label
         colnames(data) <- md[, label_by]
       }
       # color vector
-      qual_col_pals <- RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category == 'qual',]
-      col_vector <- unlist(mapply(RColorBrewer::brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
-      col_vector <- rev(col_vector)
+      if(is.null(col_vector)){
+        qual_col_pals <- RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category == 'qual',]
+        col_vector <- unlist(mapply(RColorBrewer::brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+        col_vector <- rev(col_vector)
+      }
 
-      # TODO: add protein groups or gene names (instead of ID numbers)
       # Heatmap annotation
       colors <- col_vector[seq_len(length(unique(md[,condition])))]
       names(colors) <- unique(md[, condition])

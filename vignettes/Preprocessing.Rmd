@@ -68,8 +68,6 @@ Similarly, an upset plot can be generated to visualize the overlaps between sets
 plot_upset(se, color_by = NULL, label_by = NULL, mb.ratio = c(0.7,0.3), only_refs = FALSE)
 ```
 
-TODO: plot_pairs_panels !
-
 If you are interested in the intensities of specific biomarkers, you can use the `plot_markers_boxplots()` function to compare the distribution of intensities per group. The plot can be generated per marker and facet by normalization method (facet_norm = TRUE) or by normalization method and facet by marker (facet_marker = TRUE).
 
 ```{r}

@@ -11,7 +11,8 @@ plot_NA_heatmap(
   cluster_samples = TRUE,
   cluster_proteins = TRUE,
   show_row_dend = TRUE,
-  show_column_dend = FALSE
+  show_column_dend = FALSE,
+  col_vector = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plot_NA_heatmap(
 \item{show_row_dend}{Boolean. TRUE if row dendrogram should be shown.}
 
 \item{show_column_dend}{Boolean. TRUE if column dendrogram should be shown.}
+
+\item{col_vector}{Vector of colors for the color bar. If NULL, default colors are used.}
 }
 \value{
 ComplexHeatmap plot (only showing proteins with at least one missing value)
@@ -40,6 +43,7 @@ data(tuberculosis_TMT_se)
 plot_NA_heatmap(tuberculosis_TMT_se, color_by = NULL,
                 label_by = NULL, cluster_samples = TRUE,
                 cluster_proteins = TRUE, show_row_dend = TRUE,
-                show_column_dend = FALSE)
+                show_column_dend = FALSE,
+                col_vector = NULL)
 
 }

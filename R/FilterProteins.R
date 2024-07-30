@@ -180,6 +180,7 @@ filter_out_NA_proteins_by_threshold <- function(se, thr = 0.8){
 #' @param cluster_proteins Boolean. TRUE if proteins should be clustered, else FALSE.
 #' @param show_row_dend Boolean. TRUE if row dendrogram should be shown.
 #' @param show_column_dend Boolean. TRUE if column dendrogram should be shown.
+#' @param col_vector Vector of colors for the color bar. If NULL, default colors are used.
 #' @importFrom magrittr %>%
 #'
 #' @return ComplexHeatmap plot (only showing proteins with at least one missing value)
@@ -190,15 +191,16 @@ filter_out_NA_proteins_by_threshold <- function(se, thr = 0.8){
 #' plot_NA_heatmap(tuberculosis_TMT_se, color_by = NULL,
 #'                 label_by = NULL, cluster_samples = TRUE,
 #'                 cluster_proteins = TRUE, show_row_dend = TRUE,
-#'                 show_column_dend = FALSE)
+#'                 show_column_dend = FALSE,
+#'                 col_vector = NULL)
 #'
-plot_NA_heatmap <- function(se, color_by = NULL, label_by = NULL, cluster_samples = TRUE, cluster_proteins = TRUE, show_row_dend = TRUE, show_column_dend = FALSE){
+plot_NA_heatmap <- function(se, color_by = NULL, label_by = NULL, cluster_samples = TRUE, cluster_proteins = TRUE, show_row_dend = TRUE, show_column_dend = FALSE, col_vector = NULL){
   # get color and label values
   color_by <- get_color_value(se, color_by)
   tmp <- get_label_value(se, label_by)
   show_sample_names <- tmp[[1]]
   label_by <- tmp[[2]]
-
+  
   # prepare data --> make values binary (1 = valid value, 0 = missing value)
   dt <- data.table::as.data.table(SummarizedExperiment::assays(se)[["raw"]])
   dt[is.na(dt)] <- 0
@@ -230,11 +232,13 @@ plot_NA_heatmap <- function(se, color_by = NULL, label_by = NULL, cluster_sample
       rownames(annotation_col) <- coldata$Column
     }
 
-    qual_col_pals <- RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category == 'qual',]
-    col_vector <- unlist(mapply(RColorBrewer::brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
-    col_vector <- rev(col_vector)
-
-    condition_colors <- col_vector[seq_len(length(unique(annotation_col[, color_by])))]
+    if(is.null(col_vector)){
+      qual_col_pals <- RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category == 'qual',]
+      col_vector <- unlist(mapply(RColorBrewer::brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+      col_vector <- rev(col_vector)
+      
+    }
+    condition_colors <- col_vector[seq_len(length(unique(annotation_col[, color_by])))]    
     names(condition_colors) <- unique(annotation_col[, color_by])
     annotation_colors <- list(color_by = condition_colors)
     ha <- ComplexHeatmap::HeatmapAnnotation(color_by = annotation_col[, color_by], col = annotation_colors, annotation_label = c(color_by))
