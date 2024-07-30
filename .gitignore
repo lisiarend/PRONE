@@ -10,3 +10,6 @@ renv/
 PRONE.R.Rproj
 /doc/
 /Meta/
+renv.lock
+PRONE.Rproj
+.Rprofile
