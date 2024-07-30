@@ -247,6 +247,26 @@ check_input_assays <- function(se, ain) {
 }
 
 
+#' Helper function to check whether the DEqMS_PSMs_column is in the SummarizedExperiment object
+#'
+#' @param se SummarizedExperiment containing all necessary information of the proteomics data set
+#' @param DEqMS_PSMs_column String specifying which column name to use for DEqMS (default NULL)
+#'
+#' @return None
+#'
+#' @keywords internal
+check_DEqMS_parameter <- function(se, DEqMS_PSMs_column){
+  stopifnot(methods::is(DEqMS_PSMs_column, "character"))
+  if(is.null(DEqMS_PSMs_column)){
+    stop("No column name for DEqMS given!")
+  } else {
+    if(!DEqMS_PSMs_column %in% colnames(data.table::as.data.table(SummarizedExperiment::rowData(se)))){
+      stop(paste0("No column named ", DEqMS_PSMs_column, " in SummarizedExperiment!"))
+    }
+  }
+}
+
+
 #' Check parameters for DE analysis
 #'
 #' @param se SummarizedExperiment containing all necessary information of the proteomics data set
@@ -254,7 +274,7 @@ check_input_assays <- function(se, ain) {
 #'            If NULL then all normalization of the se object are plotted next to each other.
 #' @param condition column name of condition (if NULL, condition saved in SummarizedExperiment will be taken)
 #' @param comparisons Vector of comparisons that are performed in the DE analysis (from specify_comparisons method)
-#' @param DE_method String specifying which DE method should be applied (limma, ROTS)
+#' @param DE_method String specifying which DE method should be applied (limma, ROTS, DEqMS)
 #' @param covariate String specifying which column to include as covariate into limma
 #' @param logFC Boolean specifying whether to apply a logFC threshold (TRUE) or not (FALSE)
 #' @param logFC_up Upper log2 fold change threshold (dividing into up regulated)
@@ -264,13 +284,14 @@ check_input_assays <- function(se, ain) {
 #' @param p_adj_method String specifying the method for adjusted p-values
 #' @param B Number of bootstrapping for ROTS
 #' @param K Number of top-ranked features for reproducibility optimization
+#' @param DEqMS_PSMs_column String specifying which column name to use for DEqMS (default NULL)
 #'
 #' @return list of checked assays and condition column name
 #'
 #' @keywords internal
-check_DE_parameters <- function(se, ain = NULL, condition = NULL, comparisons = NULL, DE_method = "limma", covariate = NULL, logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE, p_adj_method = "BH", alpha = 0.05, B = 100, K = 500){
+check_DE_parameters <- function(se, ain = NULL, condition = NULL, comparisons = NULL, DE_method = "limma", covariate = NULL, logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE, p_adj_method = "BH", alpha = 0.05, B = 100, K = 500, DEqMS_PSMs_column = NULL){
   # check input parameters
-  stopifnot(DE_method %in% c("limma", "ROTS"))
+  stopifnot(DE_method %in% c("limma", "ROTS", "DEqMS"))
   stopifnot(p_adj_method %in% c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY","fdr", "none")) # TODO: check which values available
   stopifnot(methods::is(logFC_up, "numeric"))
   stopifnot(methods::is(logFC_down, "numeric"))
@@ -279,20 +300,20 @@ check_DE_parameters <- function(se, ain = NULL, condition = NULL, comparisons = 
   stopifnot(methods::is(alpha, "numeric"))
   stopifnot(methods::is(p_adj, "logical"))
   stopifnot(methods::is(logFC, "logical"))
-
+  
   # check covariate
   if(!is.null(covariate)){
     if(!covariate %in% colnames(data.table::as.data.table(SummarizedExperiment::colData(se)))){
       stop(paste0("No column named ", covariate, " in SummarizedExperiment!"))
     }
   }
-
+  
   # check comparisons
   # TODO
-
+  
   # get condition
   condition <- get_condition_value(se, condition)
-
+  
   # check input
   ain <- check_input_assays(se, ain)
   if(is.null(ain)){
