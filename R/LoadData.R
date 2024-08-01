@@ -101,8 +101,9 @@ load_data <- function(data, md, protein_column = "Protein.IDs", gene_column = "G
 #' data <- data[!mixed,]
 #' data$Spiked <- rep("HUMAN", nrow(data))
 #' data$Spiked[grepl("ECOLI", data$Fasta.headers)] <- "ECOLI"
-#' se <- load_spike_data(data, md, spike_column = "Spiked", spike_value = "ECOLI", spike_concentration = "Concentration",
-#'         protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = NULL, batch_column = NULL, 
+#' se <- load_spike_data(data, md, spike_column = "Spiked", spike_value = "ECOLI", 
+#'         spike_concentration = "Concentration", protein_column = "Protein.IDs", 
+#'         gene_column = "Gene.names", ref_samples = NULL, batch_column = NULL, 
 #'         condition_column = "Condition", label_column = "Label")
 #'
 load_spike_data <- function(data, md, spike_column, spike_value, spike_concentration, protein_column = "Protein.IDs", gene_column = "Gene.Names", ref_samples = NULL, batch_column = NULL, condition_column = NULL, label_column = NULL){

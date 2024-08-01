@@ -48,7 +48,7 @@ with_DEqMS branch.
 ``` r
   # Install PRONE.R from github and build vignettes
   if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE, ref = "with_DEqMS")
+  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE, ref = "develop")
 ```
 
 ## Workflow
