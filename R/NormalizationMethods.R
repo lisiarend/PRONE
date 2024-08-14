@@ -967,7 +967,7 @@ normicsNorm <- function(se, ain = "raw", aout = "NormicsVSN", method = "NormicsV
     # normalize on complete proteins data
     dt_to_norm <- Biobase::ExpressionSet(assayData = as.matrix(dt))
     norm_data <- vsn::predict(fit, dt_to_norm, log2scale = TRUE)
-    norm_dt <- expressToDT(expr_data = norm_data,
+    norm_dt <- express_to_DT(expr_data = norm_data,
                                  column_names = colnames(dt),
                                  row_names = rownames(dt))
   } else {
@@ -990,7 +990,7 @@ normicsNorm <- function(se, ain = "raw", aout = "NormicsVSN", method = "NormicsV
     if(on_raw){
       norm_dt <- log2(norm_dt)
     }
-    norm_dt <- tibToDF(norm_dt, colnames(norm_dt), rownames(norm_dt))
+    norm_dt <- tib_to_DF(norm_dt, colnames(norm_dt), rownames(norm_dt))
   }
   SummarizedExperiment::assay(se, aout, FALSE) <- norm_dt
   return(se)

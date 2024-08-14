@@ -5,9 +5,12 @@ bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
 colorlinks: yes
-output: rmarkdown::html_vignette
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{Preprocessing}
+  %\VignetteIndexEntry{2. Preprocessing}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -19,7 +22,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include = FALSE}
 library(PRONE)
 ```
 
@@ -34,7 +37,9 @@ data("tuberculosis_TMT_se")
 se <- tuberculosis_TMT_se
 ```
 
-```{r, eval = TRUE, include = FALSE}
+This SummarizedExperiment object already includes data of different normalization methods. Since this vignette should show you how to use the PRONE workflow for novel proteomics data, we will remove the normalized data and only keep the raw and log2 data that are available after loading the data accordingly. 
+
+```{r, eval = TRUE, include = TRUE}
 se <- subset_SE_by_norm(se, ain = c("raw", "log2"))
 ```
 
@@ -46,7 +51,7 @@ To get an overview on the number of NAs, you can simply use the function `get_NA
 get_NA_overview(se, ain = "log2")
 ```
 
-To get an overview on the number of samples per sample group or batch, you can simply use the function `plot_condition_overview()` by specifying the column of the meta-data that should be used for coloring. By default (condition = NULL), the column specified in `load_data()`will be used.
+To get an overview on the number of samples per sample group or batch, you can simply use the function `plot_condition_overview()` by specifying the column of the meta-data that should be used for coloring. By default (condition = NULL), the column specified in `load_data()` will be used.
 
 ```{r overview_plots}
 plot_condition_overview(se, condition = NULL)

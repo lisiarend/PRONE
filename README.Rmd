@@ -16,7 +16,6 @@ knitr::opts_chunk$set(
 # PRONE - The PROteomics Normalization Evaluator <img src="man/figures/PRONE_package_logo.png" align="right" alt="" width="150" />
 
 
-
 R Package for preprocessing, normalizing, and analyzing proteomics data
 
 ## Introduction
@@ -35,14 +34,14 @@ Spike-in data sets with known ground truth and real-world data sets of biologica
 To install the package, run:
 
 ```{r, eval = FALSE}
-  # Install PRONE.R from github and build vignettes
-  if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE)
+  # Official BioC installation instructions
+  if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+  BiocManager::install("PRONE")
   
   # Load and attach PRONE 
   library("PRONE")
-  
-  # TODO: bioconductor installation
 ```
 
 Due to current issues with DEqMS on Bioconductor and the ongoing submission of PRONE to Bioconductor, the main branch of PRONE no longer includes DEqMS functions. If you need to perform DEqMS, please use the with_DEqMS branch.

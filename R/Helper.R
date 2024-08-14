@@ -24,6 +24,7 @@ readPRONE_example <- function(path = NULL){
 #'
 #' @return String of column for condition
 #'
+#' @export
 #' @keywords internal
 get_condition_value <- function(se, condition){
   if(is.null(condition)){
@@ -52,6 +53,7 @@ get_condition_value <- function(se, condition){
 #'
 #' @return String of column to color or NULL if no color should be applied
 #'
+#' @export
 #' @keywords internal
 get_color_value <- function(se, color_by){
   if(is.null(color_by)){
@@ -88,6 +90,7 @@ get_color_value <- function(se, color_by){
 #'
 #' @return String of column to label or NULL if no label should be applied
 #'
+#' @export
 #' @keywords internal
 get_label_value <- function(se, label_by){
   show_sample_names <- TRUE
@@ -122,6 +125,7 @@ get_label_value <- function(se, label_by){
 #'
 #' @return String of column to shape or NULL if no shaping should be done
 #'
+#' @export
 #' @keywords internal
 get_shape_value <- function(se, shape_by){
   if(is.null(shape_by)){
@@ -147,6 +151,7 @@ get_shape_value <- function(se, shape_by){
 #'
 #' @return String of column to facet or NULL if no faceting should be done
 #'
+#' @export
 #' @keywords internal
 get_facet_value <- function(se, facet_by){
   if(is.null(facet_by)){
@@ -171,9 +176,10 @@ get_facet_value <- function(se, facet_by){
 #' @param row_names Row names of the expression data
 #'
 #' @return Data table containing the expression data
-#'
+#' 
+#' @export
 #' @keywords internal
-expressToDT <- function(expr_data, column_names, row_names) {
+express_to_DT <- function(expr_data, column_names, row_names) {
   data_df <- data.table::as.data.table(t(data.frame(expr_data)))
   colnames(data_df) <- column_names
   rownames(data_df) <- row_names
@@ -189,8 +195,9 @@ expressToDT <- function(expr_data, column_names, row_names) {
 #'
 #' @return Data table containing the expression data
 #'
+#' @export
 #' @keywords internal
-tibToDF <- function(expr_data, column_names, row_names) {
+tib_to_DF <- function(expr_data, column_names, row_names) {
   data_df <- data.table::as.data.table(expr_data)
   colnames(data_df) <- column_names
   rownames(data_df) <- row_names
@@ -206,6 +213,7 @@ tibToDF <- function(expr_data, column_names, row_names) {
 #'
 #' @return NULL if no methods in SummarizedExperiment object, else all available methods ready for visualization
 #'
+#' @export
 #' @keywords internal
 check_input_assays <- function(se, ain) {
   if (is.null(ain)) {
@@ -268,6 +276,7 @@ check_input_assays <- function(se, ain) {
 #'
 #' @return list of checked assays and condition column name
 #'
+#' @export
 #' @keywords internal
 check_DE_parameters <- function(se, ain = NULL, condition = NULL, comparisons = NULL, DE_method = "limma", covariate = NULL, logFC = TRUE, logFC_up = 1, logFC_down = -1, p_adj = TRUE, p_adj_method = "BH", alpha = 0.05, B = 100, K = 500){
   # check input parameters
@@ -310,6 +319,7 @@ check_DE_parameters <- function(se, ain = NULL, condition = NULL, comparisons = 
 #'
 #' @return list of valid inputs for plotting functions
 #'
+#' @export
 #' @keywords internal
 check_plot_DE_parameters <- function(de_res, ain, comparisons){
   # check if logFC, P.Value, Change, Comparison, and Assay in de_res
@@ -365,6 +375,7 @@ check_plot_DE_parameters <- function(de_res, ain, comparisons){
 #'
 #' @return list of valid inputs for plotting functions
 #'
+#' @export
 #' @keywords internal
 check_stats_spiked_DE_parameters <- function(stats, ain, comparisons){
   # check Comparison, and Assay in stats

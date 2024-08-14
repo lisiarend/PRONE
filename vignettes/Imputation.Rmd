@@ -5,9 +5,12 @@ bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
 colorlinks: yes
-output: rmarkdown::html_vignette
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{Imputation}
+  %\VignetteIndexEntry{4. Imputation}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -20,7 +23,7 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r setup}
+```{r setup, include = FALSE}
 library(PRONE)
 ```
 
@@ -43,14 +46,29 @@ As we have seen in the Preprocessing phase, that samples "1.HC_Pool1" and "1.HC_
 se <- remove_samples_manually(se, "Label", c("1.HC_Pool1", "1.HC_Pool2"))
 ```
 
+# Missigness in Proteomics Data
+
+Since proteomics data is often affected by missing values and some statistical tests do not allow a high amount of missingness in the data, people have to options to reduce the amount of missingness in the data: (1) remove proteins with missing values or (2) impute missing values.
+
+(1): this point is already shown in the Preprocessing tutorial, where we removed samples with a high amount of missing values using a predefined threshold.
+
+(2): this point will be discussed here.
+
 
 # Impute Data
 
-Currently, there is only a mixed imputation method available in PRONE: k-nearest neighbor imputation for proteins with missing values at random and a left-shifted Gaussian distribution for proteins with missing values not at random. Imputation can be performed on a selection of normalized data sets using the "ain" parameter in the `impute_SE` function. The default is to impute all assays (ain = NULL). 
+Since the initial focus of PRONE was on the evaluation of the performance of normalization methods and a selection of methods was made based on an extensive literature review, the imputation methods are currently still limited. However, to ensure that PRONE offers all steps of a typical proteomics analysis workflow, we have included a basic imputation method since in some cases imputation is favored over removing a high amount of proteins. 
+
+So currently, there is only a mixed imputation method available in PRONE: k-nearest neighbor imputation for proteins with missing values at random and a left-shifted Gaussian distribution for proteins with missing values not at random. Imputation can be performed on a selection of normalized data sets using the "ain" parameter in the `impute_SE` function. The default is to impute all assays (ain = NULL). 
 
 ```{r impute}
 se <- impute_se(se, ain = NULL)
 ```
+
+ATTENTION: 
+
+Please note that imputation can introduce bias in the data and should be used with caution. After imputing your data, have a look at the exploratory data analysis plots (such as boxplots, PCA plots, etc.) to see if the imputation method has skewed the distributions of your samples and introduced biases in your data. These visualizations options are already shown in the Normalization tutorial.
+
 
 # Session Info
 

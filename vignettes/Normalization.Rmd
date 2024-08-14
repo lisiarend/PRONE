@@ -5,9 +5,12 @@ bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
 colorlinks: yes
-output: rmarkdown::html_vignette
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{Normalization}
+  %\VignetteIndexEntry{3. Normalization}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -20,7 +23,7 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r setup}
+```{r setup, include = FALSE}
 library(PRONE)
 ```
 
@@ -35,9 +38,12 @@ data("tuberculosis_TMT_se")
 se <- tuberculosis_TMT_se
 ```
 
-```{r, eval = TRUE, include = FALSE}
+This SummarizedExperiment object already includes data of different normalization methods. Since this vignette should show you how to use the PRONE workflow for novel proteomics data, we will remove the normalized data and only keep the raw and log2 data that are available after loading the data accordingly. 
+
+```{r, eval = TRUE, include = TRUE}
 se <- subset_SE_by_norm(se, ain = c("raw", "log2"))
 ```
+
 
 # Normalization
 
@@ -53,11 +59,14 @@ You can use `normalize_se()` by specifying all normalization methods you want to
 se_norm <- normalize_se(se, c("RobNorm", "Mean", "Median"), combination_pattern = NULL)
 ```
 
-However, you can directly also add combinations of methods. The combination pattern specifies which method to apply on top of the specified normalized data. For instance, if you want to perform IRS on top of Median-normalized data:
+Tandem mass tag (TMT), a chemical labeling method that enables the simultaneous MS-analysis of up to 18 samples pooled together, is increasingly being applied in large-scale proteomic studies. Since the integration of multiple TMT batches within a single analysis leads to high batch variation and affects data quality, a batch effect correction method, such as internal reference scaling (IRS) or the `limma::removeBatchEffects` method (in PRONE: limBE), is required to adjust for these systematic biases. Commonly, batch effect correction is applied after basic normalization. However, the order of normalization and batch effect correction can be changed in PRONE.
+
+For instance, if you want to perform IRS to reduce the batch effects on top of the previously normalized data, you can use the combination pattern "_on_".  
 
 ```{r}
 se_norm <- normalize_se(se, c("RobNorm", "Mean", "Median", "IRS_on_RobNorm", "IRS_on_Mean", "IRS_on_Median"), combination_pattern = "_on_")
 ```
+
 
 Finally, you can also normalize your data by applying the specific normalization method. This makes it possible to design the parameters of an individual function more specifically. For instance, if you want to normalize the data by the median, you can use the function `medianNorm()`. By default, median normalization is performed on raw-data. Using the individual normalization functions, you can easily specify
 
@@ -76,7 +85,13 @@ We suggest using the default value of the on_raw parameter. This parameter speci
 
 # Qualitative and Quantitative Evaluation
 
-PRONE offers many functions to comparatively evaluate the performance of the normalization methods. Notably, the parameter "ain" can always be set. By specifying "ain = NULL", all normalization methods that were previously performed and are saved in the SummarizedExperiment object are considered. If you want to evaluate only a selection of normalization methods, you can specify them in the "ain" parameter. For instance, if you want to evaluate only the IRS_on_RobNorm and Mean normalization methods, you can set "ain = c("IRS_on_RobNorm", "Mean")".
+Sample distributions are often skewed due to the systematic biases introduced throughout all steps of an MS-experiment. To evaluate the performance of the normalization methods, the distribution of the normalized data can be visualized using boxplots. One would expect to align the sample distributions more closely after normalization.
+
+Moreover, since normalization tries to remove the technical bias while keeping the biological variation, PCA plots of the log2-transformed data should be used to analyze if the technical bias is more prominent than the biological variation. After normalization, the samples should cluster according to the biological groups rather than the technical biases. So it may be helpful to analyze the PCA plots of the different normalization techniques to see which normalization method mostly reduced the technical bias.
+
+Finally, the assessment of the normalization methods is commonly centered on their ability to decrease intragroup variation between samples, using intragroup pooled coefficient of variation (PCV), pooled estimate of variance (PEV), and pooled median absolute deviation (PMAD) as measures of variability. Furthermore, the Pearson correlation between samples is used to measure the similarity of the samples within the same group. A normalization method should reduce  intragroup variation between samples and increases the correlation between samples within the same group. However, please do not focus solely on intragroup variation, but also consider the other evaluation methods and perform differential expression analysis to further evaluate the methods and analyze the impact of normalization on the downstream results. For more details on how to evaluate the performance of the normalization techniques, please read our paper (TODO: add CITATION).
+
+Hence, PRONE offers many functions to comparatively evaluate the performance of the normalization methods. Notably, the parameter "ain" can always be set. By specifying "ain = NULL", all normalization methods that were previously performed and are saved in the SummarizedExperiment object are considered. If you want to evaluate only a selection of normalization methods, you can specify them in the "ain" parameter. For instance, if you want to evaluate only the IRS_on_RobNorm and Mean normalization methods, you can set "ain = c("IRS_on_RobNorm", "Mean")".
 
 ## Visual Inspection
 
@@ -85,7 +100,7 @@ You can comparatively visualize the normalized data by using the function `plot_
 ### Boxplots of Normalized Data
 
 ```{r, fig.height = 12}
-plot_boxplots(se_norm, ain = NULL, color_by = NULL, label_by = NULL, ncol = 3, facet_norm = TRUE) + ggplot2::theme(legend.position = "bottom", legend.direction = "vertical")
+plot_boxplots(se_norm, ain = NULL, color_by = NULL, label_by = NULL, ncol = 3, facet_norm = TRUE) + ggplot2::theme(legend.position = "bottom", legend.direction = "horizontal")
 
 ```
 
@@ -120,7 +135,7 @@ plot_PCA(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"), color_by = "Group"
 Or you can simply plot the PCA of the normalized data next to each other. However, the facet_by argument can then not be used. Reminder, by setting color_by = NULL, it will be first checked if a condition has been set in the SummarizedExperiment during loading the data. 
 
 ```{r}
-plot_PCA(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"), color_by = NULL, label_by = "No", shape_by = "Pool", facet_norm = TRUE) + ggplot2::theme(legend.position = "bottom", legend.direction = "vertical")
+plot_PCA(se_norm, ain = c("IRS_on_RobNorm", "IRS_on_Median"), color_by = NULL, label_by = "No", shape_by = "Pool", facet_norm = TRUE)
 ```
 
 Additionally, you can add all the individual normalized sample intensities to a big SummarizedExperiment object, and perform a single PCA on all samples (all samples meaning samples from all normalization methods). First, you need to create the SummarizedExperiment object using `generate_complete_SE()` and then you can simply call the `plot_PCA()` function.
@@ -133,8 +148,6 @@ plot_PCA(se_complete, ain = NULL, color_by = "Normalization", label_by = "No", s
 
 
 ## Intragroup Variation
-
-The assessment of the normalization methods is commonly centered on their ability to decrease intragroup variation between samples, using intragroup pooled coefficient of variation (PCV), pooled estimate of variance (PEV), and pooled median absolute deviation (PMAD) as measures of variability. Furthermore, the Pearson correlation between samples is used to measure the similarity of the samples within the same group.
 
 In PRONE, you can evaluate the intragroup variation of the normalized data by using the functions `plot_intragroup_correlation()`, `plot_intragroup_PCV()`, `plot_intragroup_PMAD()`, and `plot_intragroup_PEV()`.
 

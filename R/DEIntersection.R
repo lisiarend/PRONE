@@ -35,6 +35,8 @@ plot_upset_DE <- function(de_res, ain = NULL, comparisons = NULL, min_degree = 2
   # prepare table of intersections
   available_ains <- colnames(dt[,!colnames(dt) %in% c("Protein.IDs", "Comparison")])
   nr_methods <- data.frame("Protein.IDs" = dt$Protein.IDs, "Comparison" = dt$Comparison, "Nr" = rowSums(dt[,available_ains]))
+  dt <- dt %>%
+    dplyr::mutate(across(where(is.factor), as.character))
   t <- purrr::map2_df(dt, names(dt), ~  replace(.x, .x==TRUE, .y))
   t[t == 0] <- NA
   t <- as.data.frame(t)

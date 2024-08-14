@@ -5,9 +5,12 @@ bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
 colorlinks: yes
-output: rmarkdown::html_vignette
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{PRONE for Spike-In Data Sets}
+  %\VignetteIndexEntry{6. PRONE for Spike-In Data Sets}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -29,26 +32,40 @@ PRONE also offers some additional functionalities for the evaluation of normaliz
 
 The example spike-in data set is from [@cox_accurate_2014]. For the illustration of the package functionality, a smaller subset of the data consisting of 1500 proteins was used. For the complete data set, please refer to the original publication.
 
-## Load Data
-
-Initially, the spike-in data set needs to be imported into a SummarizedExperiment container. In contrast to the real-world data sets, you need to specify the "spike_column", "spike_value", "spike_concentration", and utilize the `load_spike_data()` function for this purpose. 
-
-Here, the "spike_column" denotes the column in the protein intensity data file encompassing information whether a proteins is classified as spike-in or background protein. The "spike_value" determines the value/identifier that is used to identify the spike-in proteins in the "spike_column", and the "spike_concentration" identifies the column containing the concentration values of the spike-in proteins (in this case the different conditions that will be tested in DE analysis).
-
 ```{r}
 data_path <- readPRONE_example("Ecoli_human_MaxLFQ_protein_intensities.csv")
 md_path <- readPRONE_example("Ecoli_human_MaxLFQ_metadata.csv")
 
 data <- read.csv(data_path)
 md <- read.csv(md_path)
+```
 
+## Load Data
+
+Before loading the data into a SummarizedExperiment object, it is important to check the organism of the protein groups. Proteins should be uniquely assigned to either the spike-in organism or the background organism. If some protein groups are mixed, they should be removed from the data since these can't be used for classification into true positives, false positives, etc.
+
+In our example, we can extract the information from the "Fasta.headers" column:
+
+```{r}
 # Check if some protein groups are mixed
-mixed <- grepl("Homo sapiens.*Escherichia|Escherichia.*Homo sapiens", data$Fasta.headers)
+mixed <- grepl("Homo sapiens.*Escherichia|Escherichia.*Homo sapiens",data$Fasta.headers) 
 data <- data[!mixed,]
 
+table(mixed) 
+```
+
+In this case, all proteins were assigned either as a spike-in or background protein. Hence, a SummarizedExperiment container of the data can be created. However, before we need to add a column of the actual organism that can be used to calculate true positives, false positives, etc.
+
+```{r}
 data$Spiked <- rep("HUMAN", nrow(data))
 data$Spiked[grepl("ECOLI", data$Fasta.headers)] <- "ECOLI"
+```
 
+In contrast to the real-world data sets, you need to specify the "spike_column", "spike_value", "spike_concentration", and utilize the `load_spike_data()` function for this purpose. 
+
+Here, the "spike_column" denotes the column in the protein intensity data file encompassing information whether a proteins is classified as spike-in or background protein. The "spike_value" determines the value/identifier that is used to identify the spike-in proteins in the "spike_column", and the "spike_concentration" identifies the column containing the concentration values of the spike-in proteins (in this case the different conditions that will be tested in DE analysis).
+
+```{r}
 se <- load_spike_data(data, md, spike_column = "Spiked", spike_value = "ECOLI", spike_concentration = "Concentration",protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = NULL, batch_column = NULL, condition_column = "Condition", label_column = "Label")
 ```
 
