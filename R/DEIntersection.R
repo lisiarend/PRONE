@@ -36,7 +36,7 @@ plot_upset_DE <- function(de_res, ain = NULL, comparisons = NULL, min_degree = 2
   available_ains <- colnames(dt[,!colnames(dt) %in% c("Protein.IDs", "Comparison")])
   nr_methods <- data.frame("Protein.IDs" = dt$Protein.IDs, "Comparison" = dt$Comparison, "Nr" = rowSums(dt[,available_ains]))
   dt <- dt %>%
-    dplyr::mutate(across(where(is.factor), as.character))
+    dplyr::mutate(dplyr::across(dplyr::where(is.factor), as.character))
   t <- purrr::map2_df(dt, names(dt), ~  replace(.x, .x==TRUE, .y))
   t[t == 0] <- NA
   t <- as.data.frame(t)
@@ -147,7 +147,7 @@ plot_jaccard_heatmap <- function(de_res, ain = NULL, comparisons = NULL, plot_ty
 
     p <- ggplot2::ggplot(melted_m, ggplot2::aes(x = Var1, y = Var2, fill = value)) +
       ggplot2::geom_tile(color = "black") +
-      ggplot2::geom_text(ggplot2::aes(label = round(value,digits = 2), color = value > 0.5)) +    
+      ggplot2::geom_text(ggplot2::aes(label = round(value,digits = 2), color = value > 0.5)) +
       ggplot2::scale_fill_gradient(low = "white", high = "#0072B2") +
       ggplot2::scale_color_manual(values = c("TRUE" = "white", "FALSE" = "black"), guide = "none") +
       ggplot2::labs(x = "Normalization Method", y = "Normalization Method", fill = "Jaccard Similarity") +
@@ -202,7 +202,7 @@ plot_jaccard_heatmap <- function(de_res, ain = NULL, comparisons = NULL, plot_ty
     if(plot_type == "facet_comp"){
       p <- ggplot2::ggplot(complete_m, ggplot2::aes(x = Var1, y = Var2, fill = value)) +
         ggplot2::geom_tile(color = "black") +
-        ggplot2::geom_text(ggplot2::aes(label = round(value,digits = 2), color = value > 0.5)) +   
+        ggplot2::geom_text(ggplot2::aes(label = round(value,digits = 2), color = value > 0.5)) +
         ggplot2::facet_wrap(~ Comparison, scales = "free") +
         ggplot2::scale_fill_gradient(low = "white", high = "#0072B2") +
         ggplot2::scale_color_manual(values = c("TRUE" = "white", "FALSE" = "black"), guide = "none") +
@@ -215,7 +215,7 @@ plot_jaccard_heatmap <- function(de_res, ain = NULL, comparisons = NULL, plot_ty
         if(nrow(tmp) > 1){
           p_comp <- ggplot2::ggplot(tmp, ggplot2::aes(x = Var1, y = Var2, fill = value)) +
             ggplot2::geom_tile(color = "black") +
-            ggplot2::geom_text(ggplot2::aes(label = round(value,digits = 2), color = value > 0.5)) +   
+            ggplot2::geom_text(ggplot2::aes(label = round(value,digits = 2), color = value > 0.5)) +
             ggplot2::scale_fill_gradient(low = "white", high = "#0072B2") +
             ggplot2::scale_color_manual(values = c("TRUE" = "white", "FALSE" = "black"), guide = "none") +
             ggplot2::labs(x = "Normalization Method", y = "Normalization Method", fill = "Jaccard Similarity") +
