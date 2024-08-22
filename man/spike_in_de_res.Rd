@@ -11,7 +11,7 @@ An object of class \code{data.table} (inherits from \code{data.frame}) with 7500
 Jürgen Cox, Marco Y. Hein, Christian A. Luber, Igor Paron, Nagarjuna Nagaraj, and Matthias Mann.Accurate Proteome-wide Label-free Quantification by Delayed Normalization and Maximal Peptide Ratio Extraction, Termed MaxLFQ. Molecular & Cellular Proteomics 13.9 (Sept. 2014), pp. 2513–2526. <https://doi.org/10.1074/mcp.M113.031591>.
 }
 \usage{
-spike_in_de_res
+data(spike_in_de_res)
 }
 \description{
 A \code{data.table} containing the DE results of the spike_in_se data set (limma, logFC > 1, logFC < -1, p.adj < 0.05)

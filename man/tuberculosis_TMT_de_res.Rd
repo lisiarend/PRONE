@@ -11,7 +11,7 @@ An object of class \code{data.table} (inherits from \code{data.frame}) with 9030
 Biadglegne et al. Mycobacterium tuberculosis Affects Protein and Lipid Content of Circulating Exosomes in Infected Patients Depending on Tuberculosis Disease State. Biomedicines 10.4 (Mar. 2022), p. 783. doi: 10.3390/ biomedicines10040783.
 }
 \usage{
-tuberculosis_TMT_de_res
+data(tuberculosis_TMT_de_res)
 }
 \description{
 A \code{data.table} containing the DE results of the tuberculosis_TMT_se data set (limma, logFC > 1, logFC < -1, p.adj < 0.05)
