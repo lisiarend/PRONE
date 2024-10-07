@@ -11,7 +11,7 @@ An object of class \code{SummarizedExperiment} with 301 rows and 20 columns.
 Biadglegne et al. Mycobacterium tuberculosis Affects Protein and Lipid Content of Circulating Exosomes in Infected Patients Depending on Tuberculosis Disease State. Biomedicines 10.4 (Mar. 2022), p. 783. doi: 10.3390/ biomedicines10040783.
 }
 \usage{
-tuberculosis_TMT_se
+data(tuberculosis_TMT_se)
 }
 \description{
 A \code{SummarizedExperiment} containing the raw and log2-scaled data of 301 proteins measured in 20 samples
