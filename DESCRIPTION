@@ -1,7 +1,7 @@
 Package: PRONE
 Type: Package
 Title: The PROteomics Normalization Evaluator
-Version: 0.99.15
+Version: 0.99.16
 Authors@R: c(person("Lis", "Arend", email = "lis.arend@tum.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7990-8385")))
 Description: High-throughput omics data are often affected by systematic biases introduced throughout all the steps of a clinical study, from sample collection to quantification. 
   Normalization methods aim to adjust for these biases to make the actual biological signal more prominent. 
