@@ -22,8 +22,9 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Load PRONE Package
 
-```{r setup, include = FALSE}
+```{r setup, message = FALSE}
 library(PRONE)
 ```
 
@@ -43,7 +44,9 @@ se <- tuberculosis_TMT_se
 In order to compare the performance of different normalization methods on their ability to detect differentially expressed proteins, we performed some normalization with batch effect correction technqiues here. For more details about how to normalize data and evaluate the normalization approaches quantitatively and qualitatively using PRONE, please refer to the ["Normalization"](Normalization.html) vignette.
 
 ```{r}
-se_norm <- normalize_se(se, c("IRS_on_RobNorm", "IRS_on_Median", "IRS_on_LoessF", "IRS_on_Quantile"), combination_pattern = "_on_")
+se_norm <- normalize_se(se, c("IRS_on_RobNorm", "IRS_on_Median", 
+                              "IRS_on_LoessF", "IRS_on_Quantile"), 
+                        combination_pattern = "_on_")
 ```
 
 # Differential Expression Analysis
@@ -65,7 +68,8 @@ First, you need to specify the comparisons you want to perform in DE analysis. F
 However, you can also just simply create a vector of comparisons to ensure the correct order and handle this vector over to the DE analysis method.
 
 ```{r}
-comparisons <- specify_comparisons(se_norm, condition = "Group", sep = NULL, control = NULL)
+comparisons <- specify_comparisons(se_norm, condition = "Group", 
+                                   sep = NULL, control = NULL)
 
 comparisons <- c("PTB-HC", "TBL-HC", "TBL-PTB", "Rx-PTB")
 ```
@@ -81,6 +85,7 @@ The function `run_DE()` performs the DE analysis on the selected SummarizedExper
 Therefore, DE analysis can be performed on multiple assays (normalization methods) at once using the already known "ain" parameter.
 
 In the following, a more detailed explanation of the other parameters is given:
+
 * The condition of the SummarizedExperiment object, specified at the beginning, can be used (condition = NULL) or any other column of the meta data can specified. 
 * Three methods are available for DE analysis: limma [@ritchie_limma_2015], DEqMS [@zhu_deqms:_2020], and ROTS [@suomi_rots:_2017]. 
 * The logFC parameter specifies if the log2 fold change should be calculated.
@@ -89,10 +94,12 @@ In the following, a more detailed explanation of the other parameters is given:
 * The alpha parameter specifies the significance level for the p-values.
 
 In addition, the following parameters are specific for the DE analysis methods:
+
 * Limma (DOI: 10.18129/B9.bioc.limma):
   * The covariate parameter can be used to include a covariate in the DE analysis in case limma is performed. This can be any column of the meta data.
   * The trend parameter specifies if the trend test should be performed in case limma is used.
   * The robust parameter specifies if the robust method should be used in case limma is used.
+  
 * ROTS (DOI: 10.18129/B9.bioc.ROTS): 
   * B is the number of bootstrapping and K is the number of top-ranked features for reproducibility optimization.
 * DEqMS (DOI: 10.18129/B9.bioc.DEqMS)
@@ -122,13 +129,16 @@ If you want to apply other logFC or p-value threshold, there is no need to re-ru
 For instance, if you want to not apply a logFC threshold and only consider proteins with an adjusted p-value of 0.05 as DE, just set the logFC parameter to FALSE. In this case, the proteins are not classified into up- and down-regulated but only as significant change or no change.
 
 ```{r}
-new_de_res <- apply_thresholds(de_res = de_res, logFC = FALSE, p_adj = TRUE, alpha = 0.05)
+new_de_res <- apply_thresholds(de_res = de_res, logFC = FALSE, p_adj = TRUE, 
+                               alpha = 0.05)
 ```
 
 However, if you still want to see if a protein has a positive or negative logFC, you can set the logFC parameter to TRUE with the logFC_up and logFC_down parameters to 0.
  
 ```{r}
-new_de_res <- apply_thresholds(de_res = de_res, logFC = TRUE, logFC_up = 0, logFC_down = 0, p_adj = TRUE, alpha = 0.05)
+new_de_res <- apply_thresholds(de_res = de_res, logFC = TRUE, 
+                               logFC_up = 0, logFC_down = 0, 
+                               p_adj = TRUE, alpha = 0.05)
 ```
 
 
@@ -142,14 +152,16 @@ To get an overview of the DE results of the different normalization methods, you
 * stacked: stack the number of DE per comparison
 * facet_regulation: stack the number of DE per comparison but facet by up- and down-regulated
 
-```{r}
-plot_overview_DE_bar(de_res, ain = NULL, comparisons = comparisons, plot_type = "facet_regulation")
+```{r, fig.cap = "Barplot showing the number of DE proteins per normalization method colored by comparison and facetted by up- and down-regulation."}
+plot_overview_DE_bar(de_res, ain = NULL, comparisons = comparisons, 
+                     plot_type = "facet_regulation")
 ```
 
 You can also just visualize two specific comparisons:
 
-```{r}
-plot_overview_DE_bar(de_res, ain = NULL, comparisons = comparisons[seq_len(2)], plot_type = "facet_comp")
+```{r, fig.cap = "Barplot showing the number of DE proteins per normalization method faceted by comparison."}
+plot_overview_DE_bar(de_res, ain = NULL, comparisons = comparisons[seq_len(2)], 
+                     plot_type = "facet_comp")
 ```
 
 
@@ -157,7 +169,7 @@ plot_overview_DE_bar(de_res, ain = NULL, comparisons = comparisons[seq_len(2)], 
 
 You can also get an overview of the DE results in form of a heatmap using the `plot_overview_DE_tile()`.
 
-```{r}
+```{r, fig.cap = "Heatmap showing the number of DE proteins per comparison and per normalization method."}
 plot_overview_DE_tile(de_res)
 ```
 
@@ -165,39 +177,50 @@ plot_overview_DE_tile(de_res)
 
 Another option is to generate volcano plots for each comparison. The function `plot_volcano_DE()` generates a grid of volcano plots for each normalization techniques (facet_norm = TRUE) or for each comparison (facet_comparison = TRUE). A list of volcano plots is returned.
 
-```{r}
-plot_volcano_DE(de_res, ain = NULL, comparisons = comparisons[1], facet_norm = TRUE)
+```{r, fig.cap = "Volcano plots per normalization method for a single comparison."}
+plot_volcano_DE(de_res, ain = NULL, comparisons = comparisons[1], 
+                facet_norm = TRUE)
 ```
 
 #### Heatmap of DE Results
 
 Furthermore, you can visualize the DE results in form of a heatmap. The function `plot_heatmap_DE()` generates a heatmap of the DE results for a specific comparison and normalization method.
 
-```{r}
-plot_heatmap_DE(se_norm, de_res, ain = c("RobNorm", "IRS_on_RobNorm"), comparison = "PTB-HC", condition = NULL, label_by = NULL, pvalue_column = "adj.P.Val")
+```{r, fig.cap = "Individual heatmap of the DE results for a specific comparison and a selection of normalization methods. The adjusted p-values are added as row annotation, while the condition of each sample is shown as column annotation."}
+plot_heatmap_DE(se_norm, de_res, ain = c("RobNorm", "IRS_on_RobNorm"), 
+                comparison = "PTB-HC", condition = NULL, label_by = NULL, 
+                pvalue_column = "adj.P.Val")
 ```
 
 ### Intersection Analysis of DE Results
 
 Moreover, you can also intersect the DE results of different normalization methods to see how many DE proteins overlap. You can either plot for each requested comparison an individual upset plot (plot_type = "single") or stack the number of overlapping DE proteins per comparison ("stacked"). Not only the upset plot(s) are returned, but also a table with the intersections is provided by the `plot_upset_DE()`function.
 
-```{r, fig.height = 12}
-intersections <- plot_upset_DE(de_res, ain = NULL, comparisons = comparisons[seq_len(3)], min_degree = 6, plot_type = "stacked")
+```{r, fig.cap = "Upset plot showing the overlapping DE proteins of different normalization methods colored by comparison.", fig.height = 12}
+intersections <- plot_upset_DE(de_res, ain = NULL, 
+                               comparisons = comparisons[seq_len(3)], 
+                               min_degree = 6, plot_type = "stacked")
 # put legend on top due to very long comparisons
-intersections$upset[[2]] <- intersections$upset[[2]] + ggplot2::theme(legend.position = "top", legend.direction = "vertical")
+intersections$upset[[2]] <- intersections$upset[[2]] + 
+  ggplot2::theme(legend.position = "top", legend.direction = "vertical")
 intersections$upset
 ```
 
 Additionally, the Jaccard similarity index can be calculated to quantify the similarity of the DE results between the different normalization methods. A individual heatmap can be generated for each comparison ("plot_type = single"), a single heatmap facetted by comparison ("facet_comp") or a single heatmap taking all comparisons into account ("all") can be generated.
 
-```{r}
-plot_jaccard_heatmap(de_res, ain = NULL, comparisons = comparisons, plot_type = "all")
+```{r, fig.cap = "Heatmap showing the Jaccard similarity indices of the DE results between different normalization methods for all comparisons."}
+plot_jaccard_heatmap(de_res, ain = NULL, comparisons = comparisons, 
+                     plot_type = "all")
 ```
 
 PRONE offers the functionality to extract a consensus set of DEPs based on a selection of normalization methods and a threshold for the number of methods that need to agree on the DE status of a protein. The function `get_consensus_DE()` returns a list of consensus DE proteins for either each comparison separately or for all comparisons combined.
 
 ```{r}
-DT::datatable(extract_consensus_DE_candidates(de_res, ain = NULL, comparisons = comparisons, norm_thr = 0.8, per_comparison = TRUE), options = list(scrollX = TRUE))
+DT::datatable(extract_consensus_DE_candidates(de_res, ain = NULL, 
+                                              comparisons = comparisons, 
+                                              norm_thr = 0.8, 
+                                              per_comparison = TRUE), 
+              options = list(scrollX = TRUE))
 ```
 
 # Session Info

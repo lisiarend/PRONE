@@ -305,6 +305,7 @@ irsNorm <- function(se, ain="raw", aout="IRS", on_raw = TRUE){
 #'
 #' @return SummarizedExperiment containing the quantile normalized data as assay (on log2 scale)
 #' @export
+#' @seealso \code{\link{preprocessCore::normalize.quantiles()}}
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -347,6 +348,7 @@ quantileNorm <- function(se, ain="log2", aout="Quantile", on_raw = FALSE){
 #'
 #' @return SummarizedExperiment containing the vsn normalized data as assay (on log2-scale)
 #' @export
+#' @seealso \code{\link{limma::normalizeVSN()}}
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -386,6 +388,7 @@ vsnNorm <- function(se, ain="raw", aout="VSN", on_raw = TRUE, VSN_quantile = 0.9
 #'
 #' @return SummarizedExperiment containing the TMM normalized data as assay (on log2 scale)
 #' @export
+#' @seealso \code{\link{edgeR::calcNormFactors()}}
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -596,6 +599,7 @@ rlrMACycNorm <- function(se, ain="log2", aout="RlrMACyc", on_raw = FALSE, iterat
 #'
 #' @return SummarizedExperiment containing the loessCyc normalized data as assay (on log2 scale)
 #' @export
+#' @seealso \code{\link{limma::normalizeCyclicLoess()}}
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -636,6 +640,7 @@ loessCycNorm <- function(se, ain="log2", aout="LoessCyc", on_raw = FALSE){
 #'
 #' @return SummarizedExperiment containing the LoessF normalized data as assay (on log2 scale)
 #' @export
+#' @seealso \code{\link{limma::normalizeCyclicLoess()}}
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -667,7 +672,9 @@ loessFNorm <- function(se, ain="log2", aout="LoessF", on_raw = FALSE){
 
 #' EigenMS Normalization
 #'
-#' Log2-scaled data should be used as input (on_raw = FALSE).
+#' EigenMS fits an analysis of variance model to estimate the effects of the experimental factors on the data using the
+#' knowledge about the experimental design, and then applies singular value decomposition to identify systematic trends 
+#' contributing to significant variation not explained by the experimental factors Log2-scaled data should be used as input (on_raw = FALSE).
 #'
 #' @param se SummarizedExperiment containing all necessary information of the proteomic dataset
 #' @param ain String which assay should be used as input
@@ -743,6 +750,7 @@ eigenMSNorm <- function(se, ain="log2", aout="EigenMS", on_raw = FALSE){
 #'
 #' @return SummarizedExperiment containing the MAD normalized data as assay (on log2 scale)
 #' @export
+#' @seealso \code{\link{NormalyzerDE::performSMADNormalization()}}
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -840,6 +848,7 @@ robnormNorm <- function(se, ain="log2", aout="RobNorm", on_raw = FALSE, gamma.0 
 #'
 #' @return SummarizedExperiment containing the limBE normalized data as assay (on log2 scale)
 #' @export
+#' @seealso \code{\link{limma::removeBatchEffect()}}
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)

@@ -19,7 +19,9 @@ eigenMSNorm(se, ain = "log2", aout = "EigenMS", on_raw = FALSE)
 SummarizedExperiment containing the EigenMS normalized data as assay (on log2 scale)
 }
 \description{
-Log2-scaled data should be used as input (on_raw = FALSE).
+EigenMS fits an analysis of variance model to estimate the effects of the experimental factors on the data using the
+knowledge about the experimental design, and then applies singular value decomposition to identify systematic trends 
+contributing to significant variation not explained by the experimental factors Log2-scaled data should be used as input (on_raw = FALSE).
 }
 \examples{
 data(tuberculosis_TMT_se)

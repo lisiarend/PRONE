@@ -1,6 +1,11 @@
 ---
 title: "Getting started with PRONE"
-author: Arend Lis
+author: 
+- name: Lis Arend
+  affiliation: 
+  - Data Science in Systems Biology, Technical University of Munich, Freising, Germany
+  - Computational Systems Biology, University of Hamburg, Hamburg, Germany
+  email: lis.arend@tum.de
 bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
@@ -52,9 +57,9 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("PRONE")
 ```
 
-```{r}
+```{r, message = FALSE}
 # Load and attach PRONE
-library("PRONE")
+library(PRONE)
 ```
 
 # Workflow
@@ -64,7 +69,9 @@ effectiveness of the previously defined normalization methods on
 proteomics data. The workflow incorporates a set of novel functions and
 also integrates various methods adopted by state-of-the-art tools.
 
-<img src="../man/figures/Workflow_PRONE.png" width="700"/>
+```{r, echo=FALSE, fig.cap="Six-step workflow of PRONE.", out.width="700px"}
+knitr::include_graphics("../man/figures/Workflow_PRONE.png")
+```
 
 Following the upload of the proteomics data into a SummarizedExperiment
 object, proteins with too many missing values can be removed, outlier
@@ -128,7 +135,10 @@ md$Column <- stringr::str_replace_all(md$Column, " ", ".")
 
 ref_samples <- md[md$Group == "ref",]$Column
 
-se <- load_data(data, md, protein_column = "Protein.IDs", gene_column = "Gene.names", ref_samples = ref_samples, batch_column = "Pool", condition_column = "Group", label_column = "Label")
+se <- load_data(data, md, protein_column = "Protein.IDs", 
+                gene_column = "Gene.names", ref_samples = ref_samples, 
+                batch_column = "Pool", condition_column = "Group", 
+                label_column = "Label")
 
 ```
 
@@ -143,7 +153,10 @@ md_path <- readPRONE_example("mouse_liver_cytochrome_P450_metadata.csv")
 data <- read.csv(data_path, check.names = FALSE)
 md <- read.csv(md_path)
 
-se <- load_data(data, md, protein_column = "Accession", gene_column = "Gene names", ref_samples = NULL, batch_column = NULL, condition_column = "Condition", label_column = NULL)
+se <- load_data(data, md, protein_column = "Accession", 
+                gene_column = "Gene names", ref_samples = NULL, 
+                batch_column = NULL, condition_column = "Condition", 
+                label_column = NULL)
 ```
 
 # Data Structure
@@ -157,7 +170,7 @@ se
 The different data types can be accessed by using the `assays()` function. Currently, only the raw data and log2-transformed data are stored in the SummarizedExperiment object.
 
 ```{r}
-SummarizedExperiment::assays(se)
+assays(se)
 ```
 
 # Preprocessing, Imputation, Normalization, Evaluation, and Differential Expression
@@ -173,7 +186,7 @@ se <- normalize_se(se, c("Median", "LoessF"))
 The normalized intensities will be saved as additional assays in the SummarizedExperiment object.
 
 ```{r}
-SummarizedExperiment::assays(se)
+assays(se)
 ```
 
 Again, more information on the individual processes can be find in dedicated vignettes.

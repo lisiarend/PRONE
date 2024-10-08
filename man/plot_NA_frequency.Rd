@@ -2,7 +2,7 @@
 % Please edit documentation in R/FilterProteins.R
 \name{plot_NA_frequency}
 \alias{plot_NA_frequency}
-\title{Plot Protein identification overlap (x = Identified in Number of Samples, y=Number of Proteins)}
+\title{Plot protein identification overlap (x = identified in number of Samples, y=number of proteins)}
 \usage{
 plot_NA_frequency(se)
 }
@@ -13,7 +13,7 @@ plot_NA_frequency(se)
 ggplot object
 }
 \description{
-Plot Protein identification overlap (x = Identified in Number of Samples, y=Number of Proteins)
+Plot protein identification overlap (x = identified in number of Samples, y=number of proteins)
 }
 \examples{
 data(tuberculosis_TMT_se)

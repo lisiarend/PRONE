@@ -27,3 +27,6 @@ tuberculosis_TMT_se <- tmmNorm(tuberculosis_TMT_se, ain = "raw",
                                   aout = "TMM", on_raw = TRUE)
 
 }
+\seealso{
+\code{\link{edgeR::calcNormFactors()}}
+}

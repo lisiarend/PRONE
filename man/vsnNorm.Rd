@@ -29,3 +29,6 @@ tuberculosis_TMT_se <- vsnNorm(tuberculosis_TMT_se, ain = "raw",
                             aout = "VSN", on_raw = TRUE, VSN_quantile = 0.9)
 
 }
+\seealso{
+\code{\link{limma::normalizeVSN()}}
+}

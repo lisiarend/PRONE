@@ -298,7 +298,7 @@ plot_NA_density <- function(se){
   return(p)
 }
 
-#' Plot Protein identification overlap (x = Identified in Number of Samples, y=Number of Proteins)
+#' Plot protein identification overlap (x = identified in number of Samples, y=number of proteins)
 #'
 #' @param se SummarizedExperiment containing all necessary information of the proteomics data set
 #'

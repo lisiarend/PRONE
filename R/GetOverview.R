@@ -323,14 +323,19 @@ plot_heatmap <- function(se, ain = NULL, color_by = c("Group", "Pool"), label_by
       data <- data[,c(refs)]
     }
     # order clustering
-    clustering <- dendsort::dendsort(stats::hclust(stats::dist(t(data))))
-    p <- ComplexHeatmap::Heatmap(stats::na.omit(as.matrix(data)),
+    data <- as.matrix(data)
+    clustering_cols <- dendsort::dendsort(stats::hclust(stats::dist(t(data))))
+    data[is.na(data)] <- -900
+    clustering_rows <- dendsort::dendsort(stats::hclust(stats::dist(data)))
+    data[data == -900] <- NA
+    p <- ComplexHeatmap::Heatmap(data,
                                  name = "Intensity",
                                  column_labels = coldata[[label_by]],
                                  show_column_names = show_sample_names,
                                  top_annotation = top_anno,
                                  show_row_names = FALSE,
-                                 cluster_columns = clustering,
+                                 cluster_rows = clustering_rows,
+                                 cluster_columns = clustering_cols,
                                  use_raster = FALSE)
     plots[[ain]] <- p
   }

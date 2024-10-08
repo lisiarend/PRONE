@@ -1,6 +1,11 @@
 ---
 title: "Imputation"
-author: Arend Lis
+author: 
+- name: Lis Arend
+  affiliation: 
+  - Data Science in Systems Biology, Technical University of Munich, Freising, Germany
+  - Computational Systems Biology, University of Hamburg, Hamburg, Germany
+  email: lis.arend@tum.de
 bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
@@ -22,8 +27,9 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Load PRONE Package
 
-```{r setup, include = FALSE}
+```{r setup, message = FALSE}
 library(PRONE)
 ```
 
@@ -67,7 +73,7 @@ se <- impute_se(se, ain = NULL)
 
 ATTENTION: 
 
-Please note that imputation can introduce bias in the data and should be used with caution. After imputing your data, have a look at the exploratory data analysis plots (such as boxplots, PCA plots, etc.) to see if the imputation method has skewed the distributions of your samples and introduced biases in your data. These visualizations options are already shown in the Normalization tutorial.
+Please note that imputation can introduce bias in the data and should be used with caution. After imputing your data, have a look at the exploratory data analysis plots (such as boxplots, PCA plots, etc.) to see if the imputation method has skewed the distributions of your samples and introduced biases in your data. These visualizations options are already shown in the ["Normalization"](Normalization.html) tutorial.
 
 
 # Session Info
