@@ -276,7 +276,6 @@ detect_outliers_POMA <- function(se, ain="log2", condition = NULL, method="eucli
   data <- SummarizedExperiment::SummarizedExperiment(assays = SummarizedExperiment::assays(se)[[ain]], colData = new_md, rowData=SummarizedExperiment::rowData(se))
   
   # perform POMA outlier detection
-  browser()
   poma_res <- POMA::PomaOutliers(data, method=method, type=type, coef = coeff)
 
   # colors

@@ -28,5 +28,5 @@ tuberculosis_TMT_se <- medianAbsDevNorm(tuberculosis_TMT_se, ain = "log2",
 
 }
 \seealso{
-\code{\link{NormalyzerDE::performSMADNormalization()}}
+[NormalyzerDE::performSMADNormalization()]
 }

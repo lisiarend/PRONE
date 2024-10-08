@@ -305,7 +305,7 @@ irsNorm <- function(se, ain="raw", aout="IRS", on_raw = TRUE){
 #'
 #' @return SummarizedExperiment containing the quantile normalized data as assay (on log2 scale)
 #' @export
-#' @seealso \code{\link{preprocessCore::normalize.quantiles()}}
+#' @seealso [preprocessCore::normalize.quantiles()]
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -348,7 +348,7 @@ quantileNorm <- function(se, ain="log2", aout="Quantile", on_raw = FALSE){
 #'
 #' @return SummarizedExperiment containing the vsn normalized data as assay (on log2-scale)
 #' @export
-#' @seealso \code{\link{limma::normalizeVSN()}}
+#' @seealso [limma::normalizeVSN()]
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -388,7 +388,7 @@ vsnNorm <- function(se, ain="raw", aout="VSN", on_raw = TRUE, VSN_quantile = 0.9
 #'
 #' @return SummarizedExperiment containing the TMM normalized data as assay (on log2 scale)
 #' @export
-#' @seealso \code{\link{edgeR::calcNormFactors()}}
+#' @seealso [edgeR::calcNormFactors()]
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -599,7 +599,7 @@ rlrMACycNorm <- function(se, ain="log2", aout="RlrMACyc", on_raw = FALSE, iterat
 #'
 #' @return SummarizedExperiment containing the loessCyc normalized data as assay (on log2 scale)
 #' @export
-#' @seealso \code{\link{limma::normalizeCyclicLoess()}}
+#' @seealso [limma::normalizeCyclicLoess()]
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -640,7 +640,7 @@ loessCycNorm <- function(se, ain="log2", aout="LoessCyc", on_raw = FALSE){
 #'
 #' @return SummarizedExperiment containing the LoessF normalized data as assay (on log2 scale)
 #' @export
-#' @seealso \code{\link{limma::normalizeCyclicLoess()}}
+#' @seealso [limma::normalizeCyclicLoess()]
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -750,7 +750,7 @@ eigenMSNorm <- function(se, ain="log2", aout="EigenMS", on_raw = FALSE){
 #'
 #' @return SummarizedExperiment containing the MAD normalized data as assay (on log2 scale)
 #' @export
-#' @seealso \code{\link{NormalyzerDE::performSMADNormalization()}}
+#' @seealso [NormalyzerDE::performSMADNormalization()]
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)
@@ -848,7 +848,7 @@ robnormNorm <- function(se, ain="log2", aout="RobNorm", on_raw = FALSE, gamma.0 
 #'
 #' @return SummarizedExperiment containing the limBE normalized data as assay (on log2 scale)
 #' @export
-#' @seealso \code{\link{limma::removeBatchEffect()}}
+#' @seealso [limma::removeBatchEffect()]
 #'
 #' @examples
 #' data(tuberculosis_TMT_se)

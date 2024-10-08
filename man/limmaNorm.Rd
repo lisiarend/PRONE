@@ -28,5 +28,5 @@ tuberculosis_TMT_se <- limmaNorm(tuberculosis_TMT_se, ain = "log2",
 
 }
 \seealso{
-\code{\link{limma::removeBatchEffect()}}
+[limma::removeBatchEffect()]
 }
