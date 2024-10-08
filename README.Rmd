@@ -44,12 +44,16 @@ To install the package, run:
   library("PRONE")
 ```
 
-Due to current issues with DEqMS on Bioconductor and the ongoing submission of PRONE to Bioconductor, the main branch of PRONE no longer includes DEqMS functions. If you need to perform DEqMS, please use the with_DEqMS branch.
+If you have troubles downloading PRONE from Bioconductor, you still have the option to install PRONE from GitHub. However, the Bioconductor download is recommended!
 
 ```{r, eval = FALSE}
   # Install PRONE.R from github and build vignettes
   if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE, ref = "develop")
+  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE)
+  
+  # Load and attach PRONE 
+  library("PRONE")
+
 ```
 
 

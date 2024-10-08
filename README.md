@@ -40,17 +40,6 @@ To install the package, run:
   # TODO: bioconductor installation
 ```
 
-Due to current issues with DEqMS on Bioconductor and the ongoing
-submission of PRONE to Bioconductor, the main branch of PRONE no longer
-includes DEqMS functions. If you need to perform DEqMS, please use the
-with_DEqMS branch.
-
-``` r
-  # Install PRONE.R from github and build vignettes
-  if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE, ref = "develop")
-```
-
 ## Workflow
 
 A six-step workflow was developed in R version 4.2.2 to evaluate the

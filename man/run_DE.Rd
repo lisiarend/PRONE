@@ -19,7 +19,8 @@ run_DE(
   B = 100,
   K = 500,
   trend = TRUE,
-  robust = TRUE
+  robust = TRUE,
+  DEqMS_PSMs_column = NULL
 )
 }
 \arguments{
@@ -32,7 +33,7 @@ If NULL then all normalization of the se object are plotted next to each other.}
 
 \item{condition}{column name of condition (if NULL, condition saved in SummarizedExperiment will be taken)}
 
-\item{DE_method}{String specifying which DE method should be applied (limma, ROTS)}
+\item{DE_method}{String specifying which DE method should be applied (limma, ROTS, DEqMS)}
 
 \item{covariate}{String specifying which column to include as covariate into limma}
 
@@ -53,6 +54,8 @@ If NULL then all normalization of the se object are plotted next to each other.}
 \item{trend}{logical, should an intensity-dependent trend be allowed for the prior variance? If FALSE then the prior variance is constant. Alternatively, trend can be a row-wise numeric vector, which will be used as the covariate for the prior variance.}
 
 \item{robust}{logical, should the estimation of df.prior and var.prior be robustified against outlier sample variances?}
+
+\item{DEqMS_PSMs_column}{String specifying which column name to use for DEqMS (default NULL).  Any column of the rowData(se) is accepted.}
 }
 \value{
 Data table of DE results of selected normalized data sets
