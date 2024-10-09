@@ -2,18 +2,18 @@
 title: "Preprocessing"
 author: 
 - name: Lis Arend
-  affiliation: 
-  - Data Science in Systems Biology, Technical University of Munich, Freising, Germany
-  - Computational Systems Biology, University of Hamburg, Hamburg, Germany
-  email: lis.arend@tum.de
 bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
 colorlinks: yes
 output: 
-  BiocStyle::html_document:
+  bookdown::html_document2:
     toc: true
     toc_depth: 2
+    number_sections: true
+    fig_caption: true
+pkgdown:
+  as_is: true
 vignette: >
   %\VignetteIndexEntry{2. Preprocessing}
   %\VignetteEngine{knitr::rmarkdown}
@@ -23,7 +23,9 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", message = TRUE, warning = FALSE
+  comment = "#>", message = TRUE, warning = FALSE,
+  fig.width=8,
+  fig.height =6
 )
 ```
 
@@ -90,7 +92,7 @@ If you are interested in the intensities of specific biomarkers, you can use the
 
 ```{r, fig.cap = "Boxplot of the log2-protein intensities of the markers Q92954;J3KP74;E9PLR3, Q9Y6Z7, and Q68CQ4. If specific biomarkers are known to be upregulated in some conditions, you can use this plot to get an impression of the intensities before doing differential expression analysis."}
 p <- plot_markers_boxplots(se, 
-                           markers = c("Q92954;J3KP74;E9PLR3", "Q9Y6Z7", "Q68CQ4"), 
+                           markers = c("Q92954;J3KP74;E9PLR3", "Q9Y6Z7"), 
                            ain = "log2", 
                            id_column = "Protein.IDs", 
                            facet_norm = FALSE, 

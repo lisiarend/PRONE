@@ -1,24 +1,32 @@
 ---
 title: "Normalization"
-author: Arend Lis
+author: 
+- name: Lis Arend
 bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
 colorlinks: yes
 output: 
-  BiocStyle::html_document:
+  bookdown::html_document2:
     toc: true
     toc_depth: 2
+    number_sections: true
+    fig_caption: true
+pkgdown:
+  as_is: true
 vignette: >
   %\VignetteIndexEntry{3. Normalization}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", message = TRUE, warning = FALSE
+  comment = "#>", message = TRUE, warning = FALSE,
+  fig.width=8,
+  fig.height =6
 )
 ```
 
@@ -104,7 +112,7 @@ You can comparatively visualize the normalized data by using the function `plot_
 
 ### Boxplots of Normalized Data
 
-```{r, fig.cap = "Boxplots of protein intensities of all normalization methods of the SummarizedExperiment object. This plot shows the protein distributions across samples.",fig.height = 12}
+```{r, fig.cap = "Boxplots of protein intensities of all normalization methods of the SummarizedExperiment object. This plot shows the protein distributions across samples.", fig.height = 8}
 plot_boxplots(se_norm, ain = NULL, color_by = NULL, 
               label_by = NULL, ncol = 3, facet_norm = TRUE) + 
   ggplot2::theme(legend.position = "bottom", legend.direction = "horizontal")

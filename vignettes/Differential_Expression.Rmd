@@ -1,24 +1,32 @@
 ---
 title: "Differential Expression Analysis"
-author: Arend Lis
+author: 
+- name: Lis Arend
 bibliography: references.bib
 biblio-style: apalike
 link-citation: yes
 colorlinks: yes
 output: 
-  BiocStyle::html_document:
+  bookdown::html_document2:
     toc: true
     toc_depth: 2
+    number_sections: true
+    fig_caption: true
+pkgdown:
+  as_is: true
 vignette: >
   %\VignetteIndexEntry{5. Differential Expression Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", message = TRUE, warning = FALSE
+  comment = "#>", message = TRUE, warning = FALSE,
+  fig.width=8,
+  fig.height =6
 )
 ```
 
