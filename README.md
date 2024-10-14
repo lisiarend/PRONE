@@ -30,14 +30,30 @@ label-free quantification (LFQ) can be analyzed.
 To install the package, run:
 
 ``` r
-  # Install PRONE.R from github and build vignettes
-  if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, dependencies = TRUE)
+  # Official BioC installation instructions
+  if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+  BiocManager::install("PRONE")
   
   # Load and attach PRONE 
   library("PRONE")
+```
+
+If you have troubles downloading PRONE from Bioconductor, you still have
+the option to install PRONE from GitHub. However, the Bioconductor
+download is recommended!
+
+``` r
+  # Install PRONE.R from github and build vignettes
+  if (!requireNamespace("devtools", quietly = TRUE)){
+    install.packages("devtools")
+  } 
+  devtools::install_github("lisiarend/PRONE", build_vignettes = TRUE, 
+                           dependencies = TRUE)
   
-  # TODO: bioconductor installation
+  # Load and attach PRONE 
+  library("PRONE")
 ```
 
 ## Workflow

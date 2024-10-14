@@ -29,5 +29,5 @@ tuberculosis_TMT_se <- quantileNorm(tuberculosis_TMT_se, ain = "log2",
 
 }
 \seealso{
-[preprocessCore::normalize.quantiles()]
+\code{\link[preprocessCore]{normalize.quantiles}()}
 }

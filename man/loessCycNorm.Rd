@@ -28,5 +28,5 @@ tuberculosis_TMT_se <- loessCycNorm(tuberculosis_TMT_se, ain = "log2",
 
 }
 \seealso{
-[limma::normalizeCyclicLoess()]
+\code{\link[limma]{normalizeCyclicLoess}()}
 }
