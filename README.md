@@ -58,7 +58,7 @@ download is recommended!
 
 ## Workflow
 
-A six-step workflow was developed in R version 4.2.2 to evaluate the
+A six-step workflow was developed in R version 4.4 to evaluate the
 effectiveness of the previously defined normalization methods on
 proteomics data. The workflow incorporates a set of novel functions and
 also integrates various methods adopted by state-of-the-art tools.
